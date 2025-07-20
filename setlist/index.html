@@ -66,7 +66,7 @@
         <!-- Main App Content (hidden until authenticated) -->
         <div id="appContent" class="hidden">
             <!-- New Song Form -->
-            <div class="mb-8 p-4 bg-gray-700 rounded-lg shadow-inner">
+            <div class="mb-6 p-4 bg-gray-700 rounded-lg shadow-inner">
                 <h2 class="text-2xl font-semibold text-white mb-4">Add New Song</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
@@ -88,7 +88,7 @@
             </div>
 
             <!-- Search Bar -->
-            <div class="mb-8 p-4 bg-gray-700 rounded-lg shadow-inner">
+            <div class="mb-6 p-4 bg-gray-700 rounded-lg shadow-inner">
                 <label for="searchInput" class="block text-sm font-medium text-gray-300 mb-1">Search Songs</label>
                 <input type="text" id="searchInput" placeholder="Search by title or artist..." class="w-full p-3 border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
             </div>
@@ -96,7 +96,7 @@
             <!-- Songs List -->
             <div>
                 <h2 class="text-2xl font-semibold text-white mb-4">Current Songs</h2>
-                <div id="proposalsList" class="space-y-4">
+                <div id="proposalsList" class="space-y-3">
                     <!-- Songs will be dynamically loaded here -->
                     <p id="loadingMessage" class="text-center text-gray-400">Loading songs...</p>
                 </div>
@@ -292,7 +292,8 @@
 
             try {
                 // Automatically vote for own song
-                const initialVotes = [{ userId: currentUserId, displayName: currentUserDisplayName }];
+                // The votes array will now store just UIDs for consistency with arrayUnion/Remove
+                const initialVotes = [currentUserId];
 
                 // Add a new document to the 'proposals' collection
                 await addDoc(collection(db, `artifacts/${appId}/public/data/proposals`), { // Still using 'proposals' collection name for data consistency
@@ -361,13 +362,28 @@
                 const proposal = prop.data;
                 const proposalId = prop.id;
                 const votes = proposal.votes || [];
+                // Now votes array contains UIDs directly
                 const voteCount = votes.length;
-                const hasVoted = votes.some(vote => vote.userId === currentUserId);
+                const hasVoted = votes.includes(currentUserId); // Check for UID directly
                 const proposerName = proposal.createdByDisplayName || `User ${proposal.createdBy.substring(0, 8)}...`;
                 const isOwner = proposal.createdBy === currentUserId;
 
+                // For displaying voters, we'll try to use the stored display name if available
+                // Otherwise, we'll just show a generic "User X..."
+                const voterDisplayNames = votes
+                    .filter(voterId => typeof voterId === 'string') // Safeguard: only process string UIDs
+                    .map(voterId => {
+                        if (voterId === proposal.createdBy) {
+                            return proposal.createdByDisplayName || `User ${voterId.substring(0, 8)}...`;
+                        }
+                        // For other voters, we don't have their display name stored with the vote itself.
+                        // In a more complex app, you'd have a 'users' collection to look up names.
+                        // For now, we'll just show their truncated UID.
+                        return `User ${voterId.substring(0, 8)}...`;
+                    });
+
                 const voterListHtml = votes.length > 0
-                    ? `<div class="text-xs text-gray-400 mt-2">Voted by: ${votes.map(v => v.displayName || `User ${v.userId.substring(0, 8)}...`).join(', ')}</div>`
+                    ? `<div class="text-xs text-gray-400 mt-2">Voted by: ${voterDisplayNames.join(', ')}</div>`
                     : '';
 
                 const linkHtml = proposal.link
@@ -377,17 +393,19 @@
                 const proposalDiv = document.createElement('div');
                 proposalDiv.className = 'bg-gray-700 p-4 rounded-lg shadow-md flex flex-col';
                 proposalDiv.innerHTML = `
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3">
-                        <div class="flex-grow mb-3 sm:mb-0">
-                            <h3 class="text-xl font-semibold text-white">${proposal.title}</h3>
-                            <p class="text-gray-300 text-sm sm:text-base">${proposal.description}</p>
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2">
+                        <div class="flex-grow mb-2 sm:mb-0">
+                            <div class="flex flex-col sm:flex-row sm:items-baseline sm:gap-x-2">
+                                <h3 class="text-xl font-semibold text-white leading-tight">${proposal.title}</h3>
+                                <p class="text-gray-300 text-sm sm:text-base leading-tight mt-1 sm:mt-0">${proposal.description}</p>
+                            </div>
                             ${linkHtml}
-                            <p class="text-gray-400 text-xs mt-1">Proposed by: ${proposerName}</p>
+                            <p class="text-gray-400 text-xs mt-1 leading-tight">Proposed by: ${proposerName}</p>
                             ${voterListHtml}
                         </div>
                         <div class="flex flex-wrap justify-end gap-2 sm:flex-nowrap sm:justify-start mt-2 sm:mt-0">
                             <span class="text-xl font-bold text-blue-400">${voteCount} Votes</span>
-                            <button id="voteBtn-${proposalId}" class="vote-btn ${hasVoted ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'} text-white py-2 px-3 rounded-md transition duration-300 ease-in-out shadow-sm text-sm">
+                            <button id="voteBtn-${proposalId}" class="vote-btn ${hasVoted ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'} text-white py-2 px-3 rounded-md transition duration-300 ease-in-out shadow-sm text-sm" data-id="${proposalId}" data-voted="${hasVoted}">
                                 ${hasVoted ? 'Voted' : 'Vote'}
                             </button>
                             ${isOwner ? `
@@ -406,7 +424,7 @@
                             </div>
                             <div class="flex flex-col sm:flex-row gap-2">
                                 <textarea id="commentInput-${proposalId}" placeholder="Add a comment..." class="flex-grow p-2 border border-gray-600 rounded-md text-sm resize-y min-h-[40px] bg-gray-900 text-white"></textarea>
-                                <button class="post-comment-btn bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-gray-700 transition duration-300 shadow-sm">Post</button>
+                                <button class="post-comment-btn bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-gray-700 transition duration-300 shadow-sm" data-id="${proposalId}">Post</button>
                             </div>
                         </div>
                     </div>
@@ -432,14 +450,14 @@
 
                     try {
                         if (votedStatus) {
-                            // User has voted, so remove their vote object
+                            // User has voted, so remove their UID
                             await updateDoc(proposalRef, {
-                                votes: arrayRemove({ userId: currentUserId, displayName: currentUserDisplayName })
+                                votes: arrayRemove(currentUserId)
                             });
                         } else {
-                            // User has not voted, so add their vote object
+                            // User has not voted, so add their UID
                             await updateDoc(proposalRef, {
-                                votes: arrayUnion({ userId: currentUserId, displayName: currentUserDisplayName })
+                                votes: arrayUnion(currentUserId)
                             });
                         }
                     } catch (e) {
@@ -484,7 +502,7 @@
             // Add event listeners to post comment buttons
             document.querySelectorAll('.post-comment-btn').forEach(button => {
                 button.addEventListener('click', async (event) => {
-                    const proposalId = event.target.dataset.id;
+                    const proposalId = event.target.dataset.id; // Corrected: now gets ID from button's data-id
                     const commentInput = document.getElementById(`commentInput-${proposalId}`);
                     const commentText = commentInput.value.trim();
 
