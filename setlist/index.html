@@ -17,32 +17,32 @@
             width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #f1f1f1;
+            background: #333; /* Darker track for dark theme */
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb {
-            background: #888;
+            background: #666; /* Darker thumb for dark theme */
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #555;
+            background: #888;
         }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col items-center p-4 sm:p-6">
-    <div class="bg-white p-6 sm:p-8 rounded-xl shadow-lg w-full max-w-md md:max-w-2xl lg:max-w-4xl">
-        <h1 class="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-6">Proposal Voting</h1>
-        <p class="text-center text-gray-600 mb-8">
+<body class="bg-gray-900 min-h-screen flex flex-col items-center p-4 sm:p-6 text-gray-100">
+    <div class="bg-gray-800 p-6 sm:p-8 rounded-xl shadow-lg w-full max-w-md md:max-w-2xl lg:max-w-4xl">
+        <h1 class="text-3xl sm:text-4xl font-bold text-center text-white mb-6">Proposal Voting</h1>
+        <p class="text-center text-gray-300 mb-8">
             Add new proposals, then vote on your favorites!
             <span id="auth-status">
-                Your user is: <span id="user-id" class="font-semibold text-blue-600">Not signed in</span>
+                Your user is: <span id="user-id" class="font-semibold text-blue-400">Not signed in</span>
             </span>
         </p>
 
         <!-- Authentication Section -->
         <div id="authSection" class="text-center mb-8">
-            <p class="text-gray-700 mb-4">Please sign in to add proposals and vote:</p>
-            <button id="signInWithGoogleBtn" class="bg-red-600 text-white py-3 px-6 rounded-md hover:bg-red-700 transition duration-300 ease-in-out shadow-md flex items-center justify-center mx-auto">
+            <p class="text-gray-300 mb-4">Please sign in to add proposals and vote:</p>
+            <button id="signInWithGoogleBtn" class="bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition duration-300 ease-in-out shadow-md flex items-center justify-center mx-auto">
                 <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12.24 10.27c.33 0 .65.03.96.08 1.48-.96 2.49-2.73 2.49-4.8 0-3.3-2.69-5.99-5.99-5.99-3.3 0-5.99 2.69-5.99 5.99 0 3.1 2.36 5.67 5.4 5.94v-2.06c-1.34-.27-2.35-1.5-2.35-3.08 0-1.7 1.39-3.09 3.09-3.09 1.7 0 3.09 1.39 3.09 3.09 0 1.58-1.01 2.81-2.35 3.08v2.06c3.04-.27 5.4-2.84 5.4-5.94 0-3.3-2.69-5.99-5.99-5.99z" fill="#EA4335"/>
                     <path d="M12.24 10.27c-.33 0-.65-.03-.96-.08-1.48.96-2.49 2.73-2.49 4.8 0 3.3 2.69 5.99 5.99 5.99 3.3 0 5.99-2.69 5.99-5.99 0-3.1-2.36-5.67-5.4-5.94v2.06c1.34.27 2.35 1.5 2.35 3.08 0 1.7-1.39 3.09-3.09 3.09-1.7 0-3.09-1.39-3.09-3.09 0-1.58 1.01-2.81 2.35-3.08z" fill="#FBBC04"/>
@@ -56,16 +56,20 @@
         <!-- Main App Content (hidden until authenticated) -->
         <div id="appContent" class="hidden">
             <!-- New Proposal Form -->
-            <div class="mb-8 p-4 bg-blue-50 rounded-lg shadow-inner">
-                <h2 class="text-2xl font-semibold text-blue-800 mb-4">Add New Proposal</h2>
+            <div class="mb-8 p-4 bg-gray-700 rounded-lg shadow-inner">
+                <h2 class="text-2xl font-semibold text-white mb-4">Add New Proposal</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
-                        <label for="proposalTitle" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                        <input type="text" id="proposalTitle" placeholder="e.g., Bohemian Rhapsody" class="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                        <label for="proposalTitle" class="block text-sm font-medium text-gray-300 mb-1">Title</label>
+                        <input type="text" id="proposalTitle" placeholder="e.g., Bohemian Rhapsody" class="w-full p-3 border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
                     </div>
                     <div>
-                        <label for="proposalDescription" class="block text-sm font-medium text-gray-700 mb-1">Artist/Description</label>
-                        <input type="text" id="proposalDescription" placeholder="e.g., Queen (Classic Rock)" class="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                        <label for="proposalDescription" class="block text-sm font-medium text-gray-300 mb-1">Artist/Description</label>
+                        <input type="text" id="proposalDescription" placeholder="e.g., Queen (Classic Rock)" class="w-full p-3 border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label for="proposalLink" class="block text-sm font-medium text-gray-300 mb-1">YouTube/Spotify Link (Optional)</label>
+                        <input type="url" id="proposalLink" placeholder="e.g., https://www.youtube.com/watch?v=fJ9rUzIMcZQ" class="w-full p-3 border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
                     </div>
                 </div>
                 <button id="addProposalBtn" class="w-full bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition duration-300 ease-in-out shadow-md">
@@ -73,12 +77,18 @@
                 </button>
             </div>
 
+            <!-- Search Bar -->
+            <div class="mb-8 p-4 bg-gray-700 rounded-lg shadow-inner">
+                <label for="searchInput" class="block text-sm font-medium text-gray-300 mb-1">Search Proposals</label>
+                <input type="text" id="searchInput" placeholder="Search by title or artist..." class="w-full p-3 border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
+            </div>
+
             <!-- Proposals List -->
             <div>
-                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Current Proposals</h2>
+                <h2 class="text-2xl font-semibold text-white mb-4">Current Proposals</h2>
                 <div id="proposalsList" class="space-y-4">
                     <!-- Proposals will be dynamically loaded here -->
-                    <p id="loadingMessage" class="text-center text-gray-500">Loading proposals...</p>
+                    <p id="loadingMessage" class="text-center text-gray-400">Loading proposals...</p>
                 </div>
             </div>
         </div>
@@ -86,8 +96,8 @@
 
     <!-- Message Box for alerts -->
     <div id="messageBox" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden z-50">
-        <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center">
-            <p id="messageText" class="text-lg font-semibold text-gray-800 mb-4"></p>
+        <div class="bg-gray-800 p-6 rounded-lg shadow-xl max-w-sm w-full text-center text-gray-100">
+            <p id="messageText" class="text-lg font-semibold mb-4"></p>
             <button id="messageBoxCloseBtn" class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">
                 OK
             </button>
@@ -96,19 +106,23 @@
 
     <!-- Edit Proposal Modal -->
     <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden z-50">
-        <div class="bg-white p-6 rounded-xl shadow-lg w-full max-w-md">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Edit Proposal</h2>
+        <div class="bg-gray-800 p-6 rounded-xl shadow-lg w-full max-w-md text-gray-100">
+            <h2 class="text-2xl font-semibold text-white mb-4">Edit Proposal</h2>
             <input type="hidden" id="editProposalId">
             <div class="mb-4">
-                <label for="editTitle" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                <input type="text" id="editTitle" class="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                <label for="editTitle" class="block text-sm font-medium text-gray-300 mb-1">Title</label>
+                <input type="text" id="editTitle" class="w-full p-3 border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
+            </div>
+            <div class="mb-4">
+                <label for="editDescription" class="block text-sm font-medium text-gray-300 mb-1">Artist/Description</label>
+                <input type="text" id="editDescription" class="w-full p-3 border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
             </div>
             <div class="mb-6">
-                <label for="editDescription" class="block text-sm font-medium text-gray-700 mb-1">Artist/Description</label>
-                <input type="text" id="editDescription" class="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                <label for="editLink" class="block text-sm font-medium text-gray-300 mb-1">YouTube/Spotify Link (Optional)</label>
+                <input type="url" id="editLink" class="w-full p-3 border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
             </div>
             <div class="flex justify-end space-x-3">
-                <button id="cancelEditBtn" class="bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-400 transition duration-300">Cancel</button>
+                <button id="cancelEditBtn" class="bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-gray-700 transition duration-300">Cancel</button>
                 <button id="saveEditBtn" class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">Save Changes</button>
             </div>
         </div>
@@ -146,6 +160,7 @@
         // Get DOM elements
         const proposalTitleInput = document.getElementById('proposalTitle');
         const proposalDescriptionInput = document.getElementById('proposalDescription');
+        const proposalLinkInput = document.getElementById('proposalLink'); // New link input
         const addProposalBtn = document.getElementById('addProposalBtn');
         const proposalsList = document.getElementById('proposalsList');
         const loadingMessage = document.getElementById('loadingMessage');
@@ -156,12 +171,14 @@
         const messageBox = document.getElementById('messageBox');
         const messageText = document.getElementById('messageText');
         const messageBoxCloseBtn = document.getElementById('messageBoxCloseBtn');
+        const searchInput = document.getElementById('searchInput'); // New search input
 
         // Edit Modal Elements
         const editModal = document.getElementById('editModal');
         const editProposalIdInput = document.getElementById('editProposalId');
         const editTitleInput = document.getElementById('editTitle');
         const editDescriptionInput = document.getElementById('editDescription');
+        const editLinkInput = document.getElementById('editLink'); // New edit link input
         const cancelEditBtn = document.getElementById('cancelEditBtn');
         const saveEditBtn = document.getElementById('saveEditBtn');
 
@@ -216,7 +233,7 @@
                 appContent.classList.add('hidden'); // Hide app content
                 console.log("User is signed out.");
                 // Clear proposals list if no user is signed in
-                proposalsList.innerHTML = '<p class="text-center text-gray-500">Please sign in to view and add proposals.</p>';
+                proposalsList.innerHTML = '<p class="text-center text-gray-400">Please sign in to view and add proposals.</p>';
                 loadingMessage.classList.add('hidden');
             }
         });
@@ -225,6 +242,7 @@
         addProposalBtn.addEventListener('click', async () => {
             const title = proposalTitleInput.value.trim();
             const description = proposalDescriptionInput.value.trim();
+            const link = proposalLinkInput.value.trim();
 
             if (!title || !description) {
                 showMessageBox("Please enter both a title and a description for the proposal.");
@@ -237,17 +255,22 @@
             }
 
             try {
+                // Automatically vote for own proposal
+                const initialVotes = [{ userId: currentUserId, displayName: currentUserDisplayName }];
+
                 // Add a new document to the 'proposals' collection
                 await addDoc(collection(db, `artifacts/${appId}/public/data/proposals`), {
                     title: title,
                     description: description,
-                    votes: [], // Array to store objects { userId, displayName }
+                    link: link, // Save the optional link
+                    votes: initialVotes, // User automatically votes for their own proposal
                     createdAt: new Date(),
                     createdBy: currentUserId,
                     createdByDisplayName: currentUserDisplayName // Store the display name
                 });
                 proposalTitleInput.value = '';
                 proposalDescriptionInput.value = '';
+                proposalLinkInput.value = ''; // Clear link input
             } catch (e) {
                 console.error("Error adding document: ", e);
                 showMessageBox("Failed to add proposal. Please try again.");
@@ -255,6 +278,8 @@
         });
 
         // Listen for real-time updates to proposals
+        let allProposals = []; // Store all proposals for searching
+
         function listenForProposals() {
             // Ensure currentUserId is available before listening
             if (!currentUserId) {
@@ -267,166 +292,187 @@
             const q = query(proposalsColRef, orderBy("createdAt", "desc"));
 
             onSnapshot(q, (snapshot) => {
-                proposalsList.innerHTML = ''; // Clear existing list
-                loadingMessage.classList.add('hidden'); // Hide loading message
-
-                if (snapshot.empty) {
-                    proposalsList.innerHTML = '<p class="text-center text-gray-500">No proposals yet. Be the first to add one!</p>';
-                    return;
-                }
-
-                snapshot.docs.forEach(docSnapshot => {
-                    const proposal = docSnapshot.data();
-                    const proposalId = docSnapshot.id;
-                    const votes = proposal.votes || [];
-                    const voteCount = votes.length;
-                    // Check if the current user's UID is in the votes array
-                    const hasVoted = votes.some(vote => vote.userId === currentUserId);
-                    const proposerName = proposal.createdByDisplayName || `User ${proposal.createdBy.substring(0, 8)}...`; // Use display name or truncated UID
-                    const isOwner = proposal.createdBy === currentUserId;
-
-                    // Generate voter list HTML
-                    const voterListHtml = votes.length > 0
-                        ? `<div class="text-xs text-gray-500 mt-2">Voted by: ${votes.map(v => v.displayName || `User ${v.userId.substring(0, 8)}...`).join(', ')}</div>`
-                        : '';
-
-                    const proposalDiv = document.createElement('div');
-                    proposalDiv.className = 'bg-white p-4 rounded-lg shadow-md flex flex-col';
-                    proposalDiv.innerHTML = `
-                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3">
-                            <div class="flex-grow mb-3 sm:mb-0">
-                                <h3 class="text-xl font-semibold text-gray-900">${proposal.title}</h3>
-                                <p class="text-gray-600 text-sm sm:text-base">${proposal.description}</p>
-                                <p class="text-gray-500 text-xs mt-1">Proposed by: ${proposerName}</p>
-                                ${voterListHtml}
-                            </div>
-                            <div class="flex items-center space-x-4 mt-2 sm:mt-0">
-                                <span class="text-xl font-bold text-blue-700">${voteCount} Votes</span>
-                                <button id="voteBtn-${proposalId}" class="vote-btn ${hasVoted ? 'bg-green-500 hover:bg-green-600' : 'bg-blue-500 hover:bg-blue-600'} text-white py-2 px-4 rounded-md transition duration-300 ease-in-out shadow-sm" data-id="${proposalId}" data-voted="${hasVoted}">
-                                    ${hasVoted ? 'Voted' : 'Vote'}
-                                </button>
-                                ${isOwner ? `
-                                <button class="edit-btn bg-yellow-500 text-white py-2 px-4 rounded-md hover:bg-yellow-600 transition duration-300 ease-in-out shadow-sm" data-id="${proposalId}" data-title="${proposal.title}" data-description="${proposal.description}">Edit</button>
-                                <button class="delete-btn bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 transition duration-300 ease-in-out shadow-sm" data-id="${proposalId}">Delete</button>
-                                ` : ''}
-                            </div>
-                        </div>
-                        <!-- Comments Section -->
-                        <div class="comments-section mt-4 pt-4 border-t border-gray-200">
-                            <h4 class="text-md font-semibold text-gray-700 mb-2">Comments</h4>
-                            <div id="commentsList-${proposalId}" class="space-y-2 text-sm text-gray-700 mb-3">
-                                <!-- Comments will be loaded here -->
-                                <p class="text-gray-500 text-xs">No comments yet.</p>
-                            </div>
-                            <div class="flex flex-col sm:flex-row gap-2">
-                                <textarea id="commentInput-${proposalId}" placeholder="Add a comment..." class="flex-grow p-2 border border-gray-300 rounded-md text-sm resize-y min-h-[40px]"></textarea>
-                                <button class="post-comment-btn bg-gray-700 text-white py-2 px-4 rounded-md hover:bg-gray-800 transition duration-300 shadow-sm" data-id="${proposalId}">Post</button>
-                            </div>
-                        </div>
-                    `;
-                    proposalsList.appendChild(proposalDiv);
-
-                    // Listen for comments for this specific proposal
-                    listenForComments(proposalId);
-                });
-
-                // Add event listeners to vote buttons
-                document.querySelectorAll('.vote-btn').forEach(button => {
-                    button.addEventListener('click', async (event) => {
-                        const proposalId = event.target.dataset.id;
-                        const votedStatus = event.target.dataset.voted === 'true';
-
-                        if (!currentUserId) {
-                            showMessageBox("You must be signed in to vote.");
-                            return;
-                        }
-
-                        const proposalRef = doc(db, `artifacts/${appId}/public/data/proposals`, proposalId);
-
-                        try {
-                            if (votedStatus) {
-                                // User has voted, so remove their vote object
-                                await updateDoc(proposalRef, {
-                                    votes: arrayRemove({ userId: currentUserId, displayName: currentUserDisplayName })
-                                });
-                            } else {
-                                // User has not voted, so add their vote object
-                                await updateDoc(proposalRef, {
-                                    votes: arrayUnion({ userId: currentUserId, displayName: currentUserDisplayName })
-                                });
-                            }
-                        } catch (e) {
-                            console.error("Error updating vote: ", e);
-                            showMessageBox("Failed to update vote. Please try again.");
-                        }
-                    });
-                });
-
-                // Add event listeners to edit buttons
-                document.querySelectorAll('.edit-btn').forEach(button => {
-                    button.addEventListener('click', (event) => {
-                        const proposalId = event.target.dataset.id;
-                        const title = event.target.dataset.title;
-                        const description = event.target.dataset.description;
-
-                        editProposalIdInput.value = proposalId;
-                        editTitleInput.value = title;
-                        editDescriptionInput.value = description;
-                        editModal.classList.remove('hidden'); // Show the modal
-                    });
-                });
-
-                // Add event listeners to delete buttons
-                document.querySelectorAll('.delete-btn').forEach(button => {
-                    button.addEventListener('click', async (event) => {
-                        const proposalId = event.target.dataset.id;
-                        if (confirm("Are you sure you want to delete this proposal?")) { // Using confirm for simplicity, custom modal for production
-                            try {
-                                await deleteDoc(doc(db, `artifacts/${appId}/public/data/proposals`, proposalId));
-                                showMessageBox("Proposal deleted successfully!");
-                            } catch (e) {
-                                console.error("Error deleting document: ", e);
-                                showMessageBox("Failed to delete proposal. Please try again.");
-                            }
-                        }
-                    });
-                });
-
-                // Add event listeners to post comment buttons
-                document.querySelectorAll('.post-comment-btn').forEach(button => {
-                    button.addEventListener('click', async (event) => {
-                        const proposalId = event.target.dataset.id;
-                        const commentInput = document.getElementById(`commentInput-${proposalId}`);
-                        const commentText = commentInput.value.trim();
-
-                        if (!commentText) {
-                            showMessageBox("Please enter a comment.");
-                            return;
-                        }
-
-                        if (!currentUserId) {
-                            showMessageBox("You must be signed in to post a comment.");
-                            return;
-                        }
-
-                        try {
-                            await addDoc(collection(db, `artifacts/${appId}/public/data/proposals/${proposalId}/comments`), {
-                                text: commentText,
-                                createdBy: currentUserId,
-                                createdByDisplayName: currentUserDisplayName,
-                                createdAt: new Date()
-                            });
-                            commentInput.value = ''; // Clear input
-                        } catch (e) {
-                            console.error("Error adding comment: ", e);
-                            showMessageBox("Failed to post comment. Please try again.");
-                        }
-                    });
-                });
+                allProposals = snapshot.docs.map(docSnapshot => ({
+                    id: docSnapshot.id,
+                    data: docSnapshot.data()
+                }));
+                renderProposals(allProposals); // Initial render
             }, (error) => {
                 console.error("Error listening to proposals:", error);
                 loadingMessage.textContent = "Error loading proposals.";
                 showMessageBox("Failed to load proposals. Please check your internet connection.");
+            });
+        }
+
+        // Function to render proposals based on current search query
+        function renderProposals(proposalsToRender) {
+            proposalsList.innerHTML = ''; // Clear existing list
+            loadingMessage.classList.add('hidden'); // Hide loading message
+
+            const searchTerm = searchInput.value.toLowerCase();
+            const filteredProposals = proposalsToRender.filter(prop => {
+                const titleMatch = prop.data.title.toLowerCase().includes(searchTerm);
+                const descriptionMatch = prop.data.description.toLowerCase().includes(searchTerm);
+                return titleMatch || descriptionMatch;
+            });
+
+            if (filteredProposals.length === 0) {
+                proposalsList.innerHTML = '<p class="text-center text-gray-400">No proposals match your search.</p>';
+                return;
+            }
+
+            filteredProposals.forEach(prop => {
+                const proposal = prop.data;
+                const proposalId = prop.id;
+                const votes = proposal.votes || [];
+                const voteCount = votes.length;
+                const hasVoted = votes.some(vote => vote.userId === currentUserId);
+                const proposerName = proposal.createdByDisplayName || `User ${proposal.createdBy.substring(0, 8)}...`;
+                const isOwner = proposal.createdBy === currentUserId;
+
+                const voterListHtml = votes.length > 0
+                    ? `<div class="text-xs text-gray-400 mt-2">Voted by: ${votes.map(v => v.displayName || `User ${v.userId.substring(0, 8)}...`).join(', ')}</div>`
+                    : '';
+
+                const linkHtml = proposal.link
+                    ? `<a href="${proposal.link}" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline text-sm mt-1 block">Listen/View Link</a>`
+                    : '';
+
+                const proposalDiv = document.createElement('div');
+                proposalDiv.className = 'bg-gray-700 p-4 rounded-lg shadow-md flex flex-col';
+                proposalDiv.innerHTML = `
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3">
+                        <div class="flex-grow mb-3 sm:mb-0">
+                            <h3 class="text-xl font-semibold text-white">${proposal.title}</h3>
+                            <p class="text-gray-300 text-sm sm:text-base">${proposal.description}</p>
+                            ${linkHtml}
+                            <p class="text-gray-400 text-xs mt-1">Proposed by: ${proposerName}</p>
+                            ${voterListHtml}
+                        </div>
+                        <div class="flex items-center space-x-4 mt-2 sm:mt-0">
+                            <span class="text-xl font-bold text-blue-400">${voteCount} Votes</span>
+                            <button id="voteBtn-${proposalId}" class="vote-btn ${hasVoted ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'} text-white py-2 px-4 rounded-md transition duration-300 ease-in-out shadow-sm" data-id="${proposalId}" data-voted="${hasVoted}">
+                                ${hasVoted ? 'Voted' : 'Vote'}
+                            </button>
+                            ${isOwner ? `
+                            <button class="edit-btn bg-yellow-600 text-white py-2 px-4 rounded-md hover:bg-yellow-700 transition duration-300 ease-in-out shadow-sm" data-id="${proposalId}" data-title="${proposal.title}" data-description="${proposal.description}" data-link="${proposal.link || ''}">Edit</button>
+                            <button class="delete-btn bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition duration-300 ease-in-out shadow-sm" data-id="${proposalId}">Delete</button>
+                            ` : ''}
+                        </div>
+                    </div>
+                    <!-- Comments Section -->
+                    <div class="comments-section mt-4 pt-4 border-t border-gray-600">
+                        <h4 class="text-md font-semibold text-gray-300 mb-2">Comments</h4>
+                        <div id="commentsList-${proposalId}" class="space-y-2 text-sm text-gray-300 mb-3">
+                            <!-- Comments will be loaded here -->
+                            <p class="text-gray-400 text-xs">No comments yet.</p>
+                        </div>
+                        <div class="flex flex-col sm:flex-row gap-2">
+                            <textarea id="commentInput-${proposalId}" placeholder="Add a comment..." class="flex-grow p-2 border border-gray-600 rounded-md text-sm resize-y min-h-[40px] bg-gray-900 text-white"></textarea>
+                            <button class="post-comment-btn bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-gray-700 transition duration-300 shadow-sm" data-id="${proposalId}">Post</button>
+                        </div>
+                    </div>
+                `;
+                proposalsList.appendChild(proposalDiv);
+
+                // Listen for comments for this specific proposal
+                listenForComments(proposalId);
+            });
+
+            // Add event listeners to vote buttons
+            document.querySelectorAll('.vote-btn').forEach(button => {
+                button.addEventListener('click', async (event) => {
+                    const proposalId = event.target.dataset.id;
+                    const votedStatus = event.target.dataset.voted === 'true';
+
+                    if (!currentUserId) {
+                        showMessageBox("You must be signed in to vote.");
+                        return;
+                    }
+
+                    const proposalRef = doc(db, `artifacts/${appId}/public/data/proposals`, proposalId);
+
+                    try {
+                        if (votedStatus) {
+                            // User has voted, so remove their vote object
+                            await updateDoc(proposalRef, {
+                                votes: arrayRemove({ userId: currentUserId, displayName: currentUserDisplayName })
+                            });
+                        } else {
+                            // User has not voted, so add their vote object
+                            await updateDoc(proposalRef, {
+                                votes: arrayUnion({ userId: currentUserId, displayName: currentUserDisplayName })
+                            });
+                        }
+                    } catch (e) {
+                        console.error("Error updating vote: ", e);
+                        showMessageBox("Failed to update vote. Please try again.");
+                    }
+                });
+            });
+
+            // Add event listeners to edit buttons
+            document.querySelectorAll('.edit-btn').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const proposalId = event.target.dataset.id;
+                    const title = event.target.dataset.title;
+                    const description = event.target.dataset.description;
+                    const link = event.target.dataset.link; // Get the link
+
+                    editProposalIdInput.value = proposalId;
+                    editTitleInput.value = title;
+                    editDescriptionInput.value = description;
+                    editLinkInput.value = link; // Set the link in the modal
+                    editModal.classList.remove('hidden'); // Show the modal
+                });
+            });
+
+            // Add event listeners to delete buttons
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', async (event) => {
+                    const proposalId = event.target.dataset.id;
+                    if (confirm("Are you sure you want to delete this proposal?")) { // Using confirm for simplicity, custom modal for production
+                        try {
+                            await deleteDoc(doc(db, `artifacts/${appId}/public/data/proposals`, proposalId));
+                            showMessageBox("Proposal deleted successfully!");
+                        } catch (e) {
+                            console.error("Error deleting document: ", e);
+                            showMessageBox("Failed to delete proposal. Please try again.");
+                        }
+                    }
+                });
+            });
+
+            // Add event listeners to post comment buttons
+            document.querySelectorAll('.post-comment-btn').forEach(button => {
+                button.addEventListener('click', async (event) => {
+                    const proposalId = event.target.dataset.id;
+                    const commentInput = document.getElementById(`commentInput-${proposalId}`);
+                    const commentText = commentInput.value.trim();
+
+                    if (!commentText) {
+                        showMessageBox("Please enter a comment.");
+                        return;
+                    }
+
+                    if (!currentUserId) {
+                        showMessageBox("You must be signed in to post a comment.");
+                        return;
+                    }
+
+                    try {
+                        await addDoc(collection(db, `artifacts/${appId}/public/data/proposals/${proposalId}/comments`), {
+                            text: commentText,
+                            createdBy: currentUserId,
+                            createdByDisplayName: currentUserDisplayName,
+                            createdAt: new Date()
+                        });
+                        commentInput.value = ''; // Clear input
+                    } catch (e) {
+                        console.error("Error adding comment: ", e);
+                        showMessageBox("Failed to post comment. Please try again.");
+                    }
+                });
             });
         }
 
@@ -442,17 +488,17 @@
                 commentsListDiv.innerHTML = ''; // Clear existing comments
 
                 if (snapshot.empty) {
-                    commentsListDiv.innerHTML = '<p class="text-gray-500 text-xs">No comments yet.</p>';
+                    commentsListDiv.innerHTML = '<p class="text-gray-400 text-xs">No comments yet.</p>';
                     return;
                 }
 
                 snapshot.docs.forEach(commentDoc => {
                     const comment = commentDoc.data();
                     const commentDiv = document.createElement('div');
-                    commentDiv.className = 'bg-gray-50 p-2 rounded-md';
+                    commentDiv.className = 'bg-gray-600 p-2 rounded-md'; /* Darker comment background */
                     commentDiv.innerHTML = `
-                        <p class="text-xs font-semibold text-gray-800">${comment.createdByDisplayName || `User ${comment.createdBy.substring(0, 8)}...`}</p>
-                        <p class="text-sm text-gray-700">${comment.text}</p>
+                        <p class="text-xs font-semibold text-gray-200">${comment.createdByDisplayName || `User ${comment.createdBy.substring(0, 8)}...`}</p>
+                        <p class="text-sm text-gray-100">${comment.text}</p>
                         <p class="text-xs text-gray-400 mt-1">${new Date(comment.createdAt.toDate()).toLocaleString()}</p>
                     `;
                     commentsListDiv.appendChild(commentDiv);
@@ -472,6 +518,7 @@
             const proposalId = editProposalIdInput.value;
             const newTitle = editTitleInput.value.trim();
             const newDescription = editDescriptionInput.value.trim();
+            const newLink = editLinkInput.value.trim(); // Get new link from modal
 
             if (!newTitle || !newDescription) {
                 showMessageBox("Title and description cannot be empty.");
@@ -482,7 +529,8 @@
                 const proposalRef = doc(db, `artifacts/${appId}/public/data/proposals`, proposalId);
                 await updateDoc(proposalRef, {
                     title: newTitle,
-                    description: newDescription
+                    description: newDescription,
+                    link: newLink // Update the link
                 });
                 editModal.classList.add('hidden');
                 showMessageBox("Proposal updated successfully!");
@@ -490,6 +538,11 @@
                 console.error("Error updating proposal: ", e);
                 showMessageBox("Failed to update proposal. Please try again.");
             }
+        });
+
+        // Search functionality
+        searchInput.addEventListener('input', () => {
+            renderProposals(allProposals); // Re-render with current search filter
         });
 
     </script>
