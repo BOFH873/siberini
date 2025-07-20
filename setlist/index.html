@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Setlist App</title>
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Inter font from Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
@@ -63,14 +61,18 @@
             Add new songs, then vote on your favorites!
             <span id="auth-status">
                 Your user is: <span id="user-id" class="font-semibold text-blue-400">Not signed in</span>
+                <button id="editDisplayNameBtn" class="ml-2 bg-gray-600 text-white p-1 rounded-md hover:bg-gray-700 transition duration-300 ease-in-out shadow-sm text-sm hidden">
+                    ⚙️
+                </button>
             </span>
+            <button id="logoutBtn" class="ml-4 bg-gray-600 text-white py-1 px-3 rounded-md hover:bg-gray-700 transition duration-300 ease-in-out shadow-sm text-sm hidden">
+                Logout
+            </button>
         </p>
 
-        <!-- Authentication Section -->
         <div id="authSection" class="text-center mb-6">
             <p class="text-gray-300 mb-3 text-sm">Please sign in to add songs and vote:</p>
             <button id="signInWithGoogleBtn" class="bg-blue-600 text-white py-2 px-5 rounded-md hover:bg-blue-700 transition duration-300 ease-in-out shadow-md flex items-center justify-center mx-auto text-base">
-                <!-- Simple Google icon for sign-in -->
                 <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12.24 10.27c.33 0 .65.03.96.08 1.48-.96 2.49-2.73 2.49-4.8 0-3.3-2.69-5.99-5.99-5.99-3.3 0-5.99 2.69-5.99 5.99 0 3.1 2.36 5.67 5.4 5.94v-2.06c-1.34-.27-2.35-1.5-2.35-3.08 0-1.7 1.39-3.09 3.09-3.09 1.7 0 3.09 1.39 3.09 3.09 0 1.58-1.01 2.81-2.35 3.08v2.06c3.04-.27 5.4-2.84 5.4-5.94 0-3.3-2.69-5.99-5.99-5.99z" fill="#EA4335"/>
                     <path d="M12.24 10.27c-.33 0-.65-.03-.96-.08-1.48.96-2.49 2.73-2.49 4.8 0 3.3 2.69 5.99 5.99 5.99 3.3 0 5.99-2.69 5.99-5.99 0-3.1-2.36-5.67-5.4-5.94v2.06c1.34.27 2.35 1.5 2.35 3.08 0 1.7-1.39 3.09-3.09 3.09-1.7 0-3.09-1.39-3.09-3.09 0-1.58 1.01-2.81 2.35-3.08z" fill="#FBBC04"/>
@@ -81,9 +83,7 @@
             </button>
         </div>
 
-        <!-- Main App Content (hidden until authenticated) -->
         <div id="appContent" class="hidden">
-            <!-- New Song Form -->
             <div class="mb-5 p-4 bg-gray-700 rounded-lg shadow-inner">
                 <h2 class="text-xl font-semibold text-white mb-3">Add New Song</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
@@ -105,24 +105,20 @@
                 </button>
             </div>
 
-            <!-- Search Bar -->
             <div class="mb-5 p-4 bg-gray-700 rounded-lg shadow-inner">
                 <label for="searchInput" class="block text-xs font-medium text-gray-300 mb-1">Search Songs</label>
                 <input type="text" id="searchInput" placeholder="Search by title or artist..." class="w-full p-2 text-sm border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
             </div>
 
-            <!-- Songs List -->
             <div>
                 <h2 class="text-xl font-semibold text-white mb-3">Current Songs</h2>
                 <div id="proposalsList" class="space-y-3">
-                    <!-- Songs will be dynamically loaded here -->
                     <p id="loadingMessage" class="text-center text-gray-400 text-sm">Loading songs...</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Message Box for alerts -->
     <div id="messageBox" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden z-50">
         <div class="bg-gray-800 p-6 rounded-lg shadow-xl max-w-sm w-full text-center text-gray-100">
             <p id="messageText" class="text-lg font-semibold mb-4"></p>
@@ -132,7 +128,6 @@
         </div>
     </div>
 
-    <!-- Edit Song Modal -->
     <div id="editModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden z-50">
         <div class="bg-gray-800 p-6 rounded-xl shadow-lg w-full max-w-md text-gray-100">
             <h2 class="text-2xl font-semibold text-white mb-4">Edit Song</h2>
@@ -156,7 +151,6 @@
         </div>
     </div>
 
-    <!-- Edit Comment Modal -->
     <div id="editCommentModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden z-50">
         <div class="bg-gray-800 p-6 rounded-xl shadow-lg w-full max-w-md text-gray-100">
             <h2 class="text-2xl font-semibold text-white mb-4">Edit Comment</h2>
@@ -173,12 +167,26 @@
         </div>
     </div>
 
+    <!-- Edit Display Name Modal -->
+    <div id="editDisplayNameModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-gray-800 p-6 rounded-xl shadow-lg w-full max-w-md text-gray-100">
+            <h2 class="text-2xl font-semibold text-white mb-4">Edit Your Display Name</h2>
+            <div class="mb-6">
+                <label for="newDisplayNameInput" class="block text-sm font-medium text-gray-300 mb-1">New Display Name</label>
+                <input type="text" id="newDisplayNameInput" class="w-full p-3 border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white" placeholder="Enter your preferred name">
+            </div>
+            <div class="flex justify-end space-x-3">
+                <button id="cancelDisplayNameEditBtn" class="bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-gray-700 transition duration-300">Cancel</button>
+                <button id="saveDisplayNameBtn" class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">Save Name</button>
+            </div>
+        </div>
+    </div>
 
-    <!-- Firebase SDKs -->
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, arrayUnion, arrayRemove, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, arrayUnion, arrayRemove, deleteDoc, query, orderBy, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // Provided Firebase Configuration
         const firebaseConfig = {
@@ -202,11 +210,12 @@
 
         let currentUserId = null; // To store the authenticated user's UID
         let currentUserDisplayName = null; // To store the authenticated user's display name
+        let userProfilesCache = {}; // Cache for user display names from Firestore
 
         // Get DOM elements
         const proposalTitleInput = document.getElementById('proposalTitle');
         const proposalDescriptionInput = document.getElementById('proposalDescription');
-        const proposalLinkInput = document.getElementById('proposalLink'); // New link input
+        const proposalLinkInput = document.getElementById('proposalLink');
         const addProposalBtn = document.getElementById('addProposalBtn');
         const proposalsList = document.getElementById('proposalsList');
         const loadingMessage = document.getElementById('loadingMessage');
@@ -214,17 +223,19 @@
         const authSection = document.getElementById('authSection');
         const appContent = document.getElementById('appContent');
         const signInWithGoogleBtn = document.getElementById('signInWithGoogleBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const editDisplayNameBtn = document.getElementById('editDisplayNameBtn'); // New button for editing display name
         const messageBox = document.getElementById('messageBox');
         const messageText = document.getElementById('messageText');
         const messageBoxCloseBtn = document.getElementById('messageBoxCloseBtn');
-        const searchInput = document.getElementById('searchInput'); // New search input
+        const searchInput = document.getElementById('searchInput');
 
         // Edit Proposal Modal Elements
         const editModal = document.getElementById('editModal');
         const editProposalIdInput = document.getElementById('editProposalId');
         const editTitleInput = document.getElementById('editTitle');
         const editDescriptionInput = document.getElementById('editDescription');
-        const editLinkInput = document.getElementById('editLink'); // New edit link input
+        const editLinkInput = document.getElementById('editLink');
         const cancelEditBtn = document.getElementById('cancelEditBtn');
         const saveEditBtn = document.getElementById('saveEditBtn');
 
@@ -235,6 +246,12 @@
         const editCommentTextInput = document.getElementById('editCommentText');
         const cancelEditCommentBtn = document.getElementById('cancelEditCommentBtn');
         const saveEditCommentBtn = document.getElementById('saveEditCommentBtn');
+
+        // Edit Display Name Modal Elements
+        const editDisplayNameModal = document.getElementById('editDisplayNameModal');
+        const newDisplayNameInput = document.getElementById('newDisplayNameInput');
+        const cancelDisplayNameEditBtn = document.getElementById('cancelDisplayNameEditBtn');
+        const saveDisplayNameBtn = document.getElementById('saveDisplayNameBtn');
 
 
         // Helper function to show custom message box
@@ -276,14 +293,68 @@
             return colors[index];
         }
 
+        // Function to update user profile in Firestore
+        async function updateUserProfileInFirestore(user) {
+            if (!user || !user.uid) return;
+
+            const userRef = doc(db, `artifacts/${appId}/public/data/userProfiles`, user.uid);
+            const currentDisplayName = user.displayName || `User ${user.uid.substring(0, 8)}...`;
+            const currentPhotoURL = user.photoURL || null;
+
+            try {
+                const userDoc = await getDoc(userRef); // Fetch current state
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    // Only update if display name or photoURL has changed
+                    if (data.displayName !== currentDisplayName || data.photoURL !== currentPhotoURL) {
+                        await updateDoc(userRef, {
+                            displayName: currentDisplayName,
+                            photoURL: currentPhotoURL,
+                            lastUpdatedAt: new Date()
+                        });
+                        console.log(`Updated user profile in Firestore for ${user.uid}`);
+                    } else {
+                        console.log(`User profile for ${user.uid} already up-to-date in Firestore.`);
+                    }
+                } else {
+                    await setDoc(userRef, {
+                        uid: user.uid,
+                        displayName: currentDisplayName,
+                        photoURL: currentPhotoURL,
+                        createdAt: new Date(),
+                        lastUpdatedAt: new Date()
+                    });
+                    console.log(`Created user profile in Firestore for ${user.uid}`);
+                }
+            } catch (error) {
+                console.error("Failed to write user profile to Firestore. Please check your Firestore security rules.", error);
+            }
+        }
+
+        // Listen for real-time updates to user profiles
+        function listenForUserProfiles() {
+            const userProfilesColRef = collection(db, `artifacts/${appId}/public/data/userProfiles`);
+            onSnapshot(userProfilesColRef, (snapshot) => {
+                userProfilesCache = {}; // Clear cache
+                snapshot.docs.forEach(docSnapshot => {
+                    userProfilesCache[docSnapshot.id] = docSnapshot.data();
+                });
+                console.log("User profiles cache updated:", userProfilesCache);
+                // Re-render proposals to reflect updated display names
+                renderProposals(allProposals);
+            }, (error) => {
+                console.error("Error listening to user profiles:", error);
+            });
+        }
+
 
         // Sign in with Google
         signInWithGoogleBtn.addEventListener('click', async () => {
             console.log("Sign-in button clicked, attempting Google sign-in...");
-            console.log("Firebase Config:", firebaseConfig); // Log the config being used
+            console.log("Firebase Config:", firebaseConfig);
             try {
                 await signInWithPopup(auth, googleProvider);
-                // onAuthStateChanged will handle UI update
+                // onAuthStateChanged will handle UI update and profile sync
             } catch (error) {
                 console.error("Google Sign-In error:", error);
                 if (error.code === 'auth/popup-closed-by-user') {
@@ -297,25 +368,91 @@
             }
         });
 
+        // Logout
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                console.log("User signed out.");
+            } catch (error) {
+                console.error("Error signing out:", error);
+                showMessageBox("Failed to log out. Please try again.");
+            }
+        });
+
+        // Edit Display Name Button Click
+        editDisplayNameBtn.addEventListener('click', () => {
+            if (auth.currentUser) {
+                newDisplayNameInput.value = auth.currentUser.displayName || ''; // Pre-fill with current name
+                editDisplayNameModal.classList.remove('hidden');
+            } else {
+                showMessageBox("You must be signed in to change your display name.");
+            }
+        });
+
+        // Cancel Edit Display Name
+        cancelDisplayNameEditBtn.addEventListener('click', () => {
+            editDisplayNameModal.classList.add('hidden');
+        });
+
+        // Save New Display Name
+        saveDisplayNameBtn.addEventListener('click', async () => {
+            const newName = newDisplayNameInput.value.trim();
+            if (!newName) {
+                showMessageBox("Display name cannot be empty.");
+                return;
+            }
+
+            if (!auth.currentUser) {
+                showMessageBox("You must be signed in to change your display name.");
+                return;
+            }
+
+            try {
+                await updateProfile(auth.currentUser, {
+                    displayName: newName
+                });
+                console.log("Firebase Auth profile updated successfully.");
+                // The onAuthStateChanged listener will pick this up and sync to Firestore
+                editDisplayNameModal.classList.add('hidden');
+                showMessageBox("Your display name has been updated!");
+            } catch (error) {
+                console.error("Error updating Firebase Auth profile:", error);
+                showMessageBox(`Failed to update display name: ${error.message}`);
+            }
+        });
+
+
         // Authenticate user
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 // User is signed in
                 currentUserId = user.uid;
-                currentUserDisplayName = user.displayName || `User ${user.uid.substring(0, 8)}...`; // Use display name or truncated UID
+                // Set initial display name from auth object; it will be refined by userProfilesCache listener
+                currentUserDisplayName = user.displayName || `User ${user.uid.substring(0, 8)}...`;
+
                 userIdDisplay.textContent = currentUserDisplayName;
                 authSection.classList.add('hidden'); // Hide auth section
                 appContent.classList.remove('hidden'); // Show app content
+                logoutBtn.classList.remove('hidden'); // Show logout button
+                editDisplayNameBtn.classList.remove('hidden'); // Show edit display name button
                 console.log("Authenticated with UID:", currentUserId, "Display Name:", currentUserDisplayName);
-                // Start listening for songs after authentication
+
+                // Update user profile in Firestore (do not await here to avoid blocking UI)
+                updateUserProfileInFirestore(user);
+
+                // Start listening for songs and user profiles after authentication
+                listenForUserProfiles(); // Start listening to user profiles
                 listenForProposals();
             } else {
                 // User is signed out
                 currentUserId = null;
                 currentUserDisplayName = null;
+                userProfilesCache = {}; // Clear cache on logout
                 userIdDisplay.textContent = "Not signed in";
                 authSection.classList.remove('hidden'); // Show auth section
                 appContent.classList.add('hidden'); // Hide app content
+                logoutBtn.classList.add('hidden'); // Hide logout button
+                editDisplayNameBtn.classList.add('hidden'); // Hide edit display name button
                 console.log("User is signed out.");
                 // Clear songs list if no user is signed in
                 proposalsList.innerHTML = '<p class="text-center text-gray-400 text-sm">Please sign in to view and add songs.</p>';
@@ -353,7 +490,8 @@
                     comments: [], // Initialize comments array
                     createdAt: new Date(),
                     createdBy: currentUserId,
-                    createdByDisplayName: currentUserDisplayName // Store the display name
+                    // Store the current user's display name from the cache/auth object
+                    createdByDisplayName: currentUserDisplayName
                 });
                 proposalTitleInput.value = '';
                 proposalDescriptionInput.value = '';
@@ -383,13 +521,20 @@
                     id: docSnapshot.id,
                     data: docSnapshot.data()
                 }));
-                renderProposals(allProposals); // Initial render
+                renderProposals(allProposals); // Initial render or re-render on data change
             }, (error) => {
                 console.error("Error listening to songs:", error);
                 loadingMessage.textContent = "Error loading songs.";
                 showMessageBox("Failed to load songs. Please check your internet connection.");
             });
         }
+
+        // Function to get display name from cache or fallback
+        function getDisplayNameForUser(userId, fallbackDisplayNameFromProposal) {
+            // Prioritize cache, then proposal's stored name, then truncated UID
+            return userProfilesCache[userId]?.displayName || fallbackDisplayNameFromProposal || `User ${userId.substring(0, 8)}...`;
+        }
+
 
         // Function to render songs based on current search query
         function renderProposals(proposalsToRender) {
@@ -421,23 +566,24 @@
                 const hasUpvoted = upvotes.includes(currentUserId);
                 const hasDownvoted = downvotes.includes(currentUserId);
 
-                const proposerName = proposal.createdByDisplayName || `User ${proposal.createdBy.substring(0, 8)}...`;
+                // Use the new helper function for proposer name
+                const proposerName = getDisplayNameForUser(proposal.createdBy, proposal.createdByDisplayName);
                 const isOwner = proposal.createdBy === currentUserId;
 
-                // Generate voter initial icons
+                // Generate voter initial icons using the new helper function
                 const upvoterIcons = upvotes
-                    .filter(voterId => typeof voterId === 'string' && voterId.length > 0) // Ensure valid UIDs
+                    .filter(voterId => typeof voterId === 'string' && voterId.length > 0)
                     .map(voterId => {
-                        const displayName = (voterId === proposal.createdBy) ? proposal.createdByDisplayName : `User ${voterId.substring(0, 8)}...`;
+                        const displayName = getDisplayNameForUser(voterId, proposal.createdBy === voterId ? proposal.createdByDisplayName : null);
                         const initials = getInitials(displayName);
                         const bgColor = getColorFromUserId(voterId);
                         return `<span class="initial-icon" style="background-color:${bgColor};" title="${displayName}">${initials}</span>`;
                     }).join('');
 
                 const downvoterIcons = downvotes
-                    .filter(voterId => typeof voterId === 'string' && voterId.length > 0) // Ensure valid UIDs
+                    .filter(voterId => typeof voterId === 'string' && voterId.length > 0)
                     .map(voterId => {
-                        const displayName = (voterId === proposal.createdBy) ? proposal.createdByDisplayName : `User ${voterId.substring(0, 8)}...`;
+                        const displayName = getDisplayNameForUser(voterId, proposal.createdBy === voterId ? proposal.createdByDisplayName : null);
                         const initials = getInitials(displayName);
                         const bgColor = getColorFromUserId(voterId);
                         return `<span class="initial-icon" style="background-color:${bgColor};" title="${displayName}">${initials}</span>`;
@@ -487,32 +633,32 @@
                             ` : ''}
                         </div>
                     </div>
-                    <!-- Comments Section -->
-                    <div c-3 pt-3 border-t border-gray-600">
+                    <div class="mt-3 pt-3 border-t border-gray-600">
                         <h4 class="text-md font-semibold text-white mb-2 cursor-pointer toggle-comments" data-id="${proposalId}">
                             💬 Comments (${comments.length}) <span class="toggle-icon">▼</span>
                         </h4>
                         <div class="comments-list-container collapsed" id="comments-list-${proposalId}">
                             ${comments.length > 0 ? comments.map(comment => `
-                                <dlass="bg-gray-600 p-2 rounded-md mb-2 text-sm flex justify-between items-start">
+                                <div class="bg-gray-600 p-2 rounded-md mb-2 text-sm flex justify-between items-start">
                                     <div>
                                         <p class="text-gray-200">${comment.text}</p>
                                         <p class="text-gray-400 text-xs mt-1">
-                                            — ${comment.createdByDisplayName || `User ${comment.createdBy.substring(0, 8)}...`}
-                                            <span class="ml-2">${new Date(comment.createdAt.secds * 1000).toLocaleString()}</span>
+                                            — ${getDisplayNameForUser(comment.createdBy, comment.createdByDisplayName)}
+                                            <span class="ml-2">${new Date(comment.createdAt.seconds * 1000).toLocaleString()}</span>
                                         </p>
                                     </div>
                                     ${comment.createdBy === currentUserId ? `
                                     <div class="flex gap-1 ml-2">
-                                        <button class="edit-comment-btn text-yellow-300 hover:text-yellow-400 text-xs p-1 rounded" data-proposal-id="${proposalId}" data-comment-id="${comment.id}" data-comment-text="${comment.text}">✏️</butt                                        <button class="delete-comment-btn text-red-300 hover:text-red-400 text-xs p-1 rounded" data-proposal-id="${proposalId}" data-comment-id="${comment.id}">🗑️</button>
+                                        <button class="edit-comment-btn text-yellow-300 hover:text-yellow-400 text-xs p-1 rounded" data-proposal-id="${proposalId}" data-comment-id="${comment.id}" data-comment-text="${comment.text}">✏️</button>
+                                        <button class="delete-comment-btn text-red-300 hover:text-red-400 text-xs p-1 rounded" data-proposal-id="${proposalId}" data-comment-id="${comment.id}">🗑️</button>
                                     </div>
                                     ` : ''}
                                 </div>
                             `).join('') : '<p class="text-gray-400 text-sm">No comments yet.</p>'}
-                            <div class="mt-3 flex gap-2 add-comment-section cosed" id="add-comment-section-${proposalId}">
+                            <div class="mt-3 flex gap-2 add-comment-section collapsed" id="add-comment-section-${proposalId}">
                                 <input type="text" placeholder="Add a comment..." class="add-comment-input w-full p-2 text-sm border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white" data-id="${proposalId}">
                                 <button class="add-comment-btn bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition duration-300 text-sm" data-id="${proposalId}">➕</button>
-                          </div>
+                            </div>
                         </div>
                     </div>
                 `;
@@ -632,7 +778,7 @@
                             id: Date.now().toString(), // Simple unique ID for the comment
                             text: commentText,
                             createdBy: currentUserId,
-                            createdByDisplayName: currentUserDisplayName,
+                            createdByDisplayName: currentUserDisplayName, // Use current display name from cache/auth
                             createdAt: new Date()
                         };
                         const proposalRef = doc(db, `artifacts/${appId}/public/data/proposals`, proposalId);
@@ -662,7 +808,7 @@
                     } else {
                         commentsContainer.classList.add('collapsed');
                         addCommentSection.classList.add('collapsed'); // Hide add comment section
-                      toggleIcon.textContent = '▼'; // Change to down arrow
+                        toggleIcon.textContent = '▼'; // Change to down arrow
                     }
                 };
             });
@@ -672,7 +818,7 @@
                 button.onclick = (event) => {
                     const proposalId = event.currentTarget.dataset.proposalId;
                     const commentId = event.currentTarget.dataset.commentId;
-                    const commentText = event.currentTarget.daset.commentText;
+                    const commentText = event.currentTarget.dataset.commentText;
 
                     editCommentProposalIdInput.value = proposalId;
                     editCommentIdInput.value = commentId;
@@ -783,4 +929,3 @@
     </script>
 </body>
 </html>
-
