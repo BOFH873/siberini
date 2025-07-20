@@ -37,12 +37,29 @@
             max-height: 500px; /* Arbitrary max-height for smooth transition */
             transition: max-height 0.5s ease-in;
         }
+        /* Initial icon styling */
+        .initial-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px; /* Small size for initials */
+            height: 24px;
+            border-radius: 50%;
+            font-size: 0.75rem; /* text-xs */
+            font-weight: 500; /* font-medium */
+            color: white;
+            flex-shrink: 0; /* Prevent shrinking */
+        }
+        /* Style for the add comment section when collapsed */
+        .add-comment-section.collapsed {
+            display: none;
+        }
     </style>
 </head>
 <body class="bg-gray-900 min-h-screen flex flex-col items-center p-4 sm:p-6 text-gray-100">
-    <div class="bg-gray-800 p-6 sm:p-8 rounded-xl shadow-lg w-full max-w-md md:max-w-2xl lg:max-w-4xl">
-        <h1 class="text-3xl sm:text-4xl font-bold text-center text-white mb-6">Setlist</h1>
-        <p class="text-center text-gray-300 mb-8">
+    <div class="bg-gray-800 p-4 sm:p-6 rounded-xl shadow-lg w-full max-w-md md:max-w-2xl lg:max-w-4xl">
+        <h1 class="text-3xl sm:text-4xl font-bold text-center text-white mb-5">Setlist</h1>
+        <p class="text-center text-gray-300 mb-6 text-sm">
             Add new songs, then vote on your favorites!
             <span id="auth-status">
                 Your user is: <span id="user-id" class="font-semibold text-blue-400">Not signed in</span>
@@ -50,9 +67,10 @@
         </p>
 
         <!-- Authentication Section -->
-        <div id="authSection" class="text-center mb-8">
-            <p class="text-gray-300 mb-4">Please sign in to add songs and vote:</p>
-            <button id="signInWithGoogleBtn" class="bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition duration-300 ease-in-out shadow-md flex items-center justify-center mx-auto">
+        <div id="authSection" class="text-center mb-6">
+            <p class="text-gray-300 mb-3 text-sm">Please sign in to add songs and vote:</p>
+            <button id="signInWithGoogleBtn" class="bg-blue-600 text-white py-2 px-5 rounded-md hover:bg-blue-700 transition duration-300 ease-in-out shadow-md flex items-center justify-center mx-auto text-base">
+                <!-- Simple Google icon for sign-in -->
                 <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12.24 10.27c.33 0 .65.03.96.08 1.48-.96 2.49-2.73 2.49-4.8 0-3.3-2.69-5.99-5.99-5.99-3.3 0-5.99 2.69-5.99 5.99 0 3.1 2.36 5.67 5.4 5.94v-2.06c-1.34-.27-2.35-1.5-2.35-3.08 0-1.7 1.39-3.09 3.09-3.09 1.7 0 3.09 1.39 3.09 3.09 0 1.58-1.01 2.81-2.35 3.08v2.06c3.04-.27 5.4-2.84 5.4-5.94 0-3.3-2.69-5.99-5.99-5.99z" fill="#EA4335"/>
                     <path d="M12.24 10.27c-.33 0-.65-.03-.96-.08-1.48.96-2.49 2.73-2.49 4.8 0 3.3 2.69 5.99 5.99 5.99 3.3 0 5.99-2.69 5.99-5.99 0-3.1-2.36-5.67-5.4-5.94v2.06c1.34.27 2.35 1.5 2.35 3.08 0 1.7-1.39 3.09-3.09 3.09-1.7 0-3.09-1.39-3.09-3.09 0-1.58 1.01-2.81 2.35-3.08z" fill="#FBBC04"/>
@@ -66,39 +84,39 @@
         <!-- Main App Content (hidden until authenticated) -->
         <div id="appContent" class="hidden">
             <!-- New Song Form -->
-            <div class="mb-6 p-4 bg-gray-700 rounded-lg shadow-inner">
-                <h2 class="text-2xl font-semibold text-white mb-4">Add New Song</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div class="mb-5 p-4 bg-gray-700 rounded-lg shadow-inner">
+                <h2 class="text-xl font-semibold text-white mb-3">Add New Song</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
                     <div>
-                        <label for="proposalTitle" class="block text-sm font-medium text-gray-300 mb-1">Title</label>
-                        <input type="text" id="proposalTitle" placeholder="e.g., Bohemian Rhapsody" class="w-full p-3 border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
+                        <label for="proposalTitle" class="block text-xs font-medium text-gray-300 mb-1">Title</label>
+                        <input type="text" id="proposalTitle" placeholder="e.g., Bohemian Rhapsody" class="w-full p-2 text-sm border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
                     </div>
                     <div>
-                        <label for="proposalDescription" class="block text-sm font-medium text-gray-300 mb-1">Artist/Description</label>
-                        <input type="text" id="proposalDescription" placeholder="e.g., Queen (Classic Rock)" class="w-full p-3 border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
+                        <label for="proposalDescription" class="block text-xs font-medium text-gray-300 mb-1">Artist/Description</label>
+                        <input type="text" id="proposalDescription" placeholder="e.g., Queen (Classic Rock)" class="w-full p-2 text-sm border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
                     </div>
                     <div class="md:col-span-2">
-                        <label for="proposalLink" class="block text-sm font-medium text-gray-300 mb-1">YouTube/Spotify Link (Optional)</label>
-                        <input type="url" id="proposalLink" placeholder="e.g., https://www.youtube.com/watch?v=fJ9rUzIMcZQ" class="w-full p-3 border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
+                        <label for="proposalLink" class="block text-xs font-medium text-gray-300 mb-1">YouTube/Spotify Link (Optional)</label>
+                        <input type="url" id="proposalLink" placeholder="e.g., https://www.youtube.com/watch?v=fJ9rUzIMcZQ" class="w-full p-2 text-sm border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
                     </div>
                 </div>
-                <button id="addProposalBtn" class="w-full bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition duration-300 ease-in-out shadow-md">
+                <button id="addProposalBtn" class="w-full bg-blue-600 text-white py-2 px-5 rounded-md hover:bg-blue-700 transition duration-300 ease-in-out shadow-md text-base">
                     Add Song
                 </button>
             </div>
 
             <!-- Search Bar -->
-            <div class="mb-6 p-4 bg-gray-700 rounded-lg shadow-inner">
-                <label for="searchInput" class="block text-sm font-medium text-gray-300 mb-1">Search Songs</label>
-                <input type="text" id="searchInput" placeholder="Search by title or artist..." class="w-full p-3 border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
+            <div class="mb-5 p-4 bg-gray-700 rounded-lg shadow-inner">
+                <label for="searchInput" class="block text-xs font-medium text-gray-300 mb-1">Search Songs</label>
+                <input type="text" id="searchInput" placeholder="Search by title or artist..." class="w-full p-2 text-sm border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white">
             </div>
 
             <!-- Songs List -->
             <div>
-                <h2 class="text-2xl font-semibold text-white mb-4">Current Songs</h2>
+                <h2 class="text-xl font-semibold text-white mb-3">Current Songs</h2>
                 <div id="proposalsList" class="space-y-3">
                     <!-- Songs will be dynamically loaded here -->
-                    <p id="loadingMessage" class="text-center text-gray-400">Loading songs...</p>
+                    <p id="loadingMessage" class="text-center text-gray-400 text-sm">Loading songs...</p>
                 </div>
             </div>
         </div>
@@ -169,7 +187,7 @@
             projectId: "siberini",
             storageBucket: "siberini.firebasestorage.app",
             messagingSenderId: "533139517303",
-            appId: "1:533139517303:web:75e143e976c48ed596bb72",
+            appId: "1:533139517303:web:75e143e976c488ed596bb72",
             measurementId: "G-GG0NF9S621"
         };
 
@@ -219,7 +237,7 @@
         const saveEditCommentBtn = document.getElementById('saveEditCommentBtn');
 
 
-        // Function to show custom message box
+        // Helper function to show custom message box
         function showMessageBox(message) {
             messageText.textContent = message;
             messageBox.classList.remove('hidden');
@@ -230,20 +248,51 @@
             messageBox.classList.add('hidden');
         });
 
+        // Helper function to generate initials from display name
+        function getInitials(name) {
+            if (!name) return '??';
+            const parts = name.split(' ').filter(n => n.length > 0);
+            if (parts.length === 1) {
+                return parts[0].substring(0, 2).toUpperCase();
+            }
+            return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+        }
+
+        // Helper function to generate a consistent color based on user ID
+        function hashCode(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                hash = str.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            return hash;
+        }
+
+        function getColorFromUserId(userId) {
+            const colors = [
+                '#EF4444', '#F97316', '#F59E0B', '#EAB308', '#84CC16', '#22C55E', '#10B981', '#06B6D4',
+                '#0EA5E9', '#3B82F6', '#6366F1', '#8B5CF6', '#A855F7', '#D946EF', '#EC4899', '#F43F5E'
+            ];
+            const index = Math.abs(hashCode(userId)) % colors.length;
+            return colors[index];
+        }
+
+
         // Sign in with Google
         signInWithGoogleBtn.addEventListener('click', async () => {
+            console.log("Sign-in button clicked, attempting Google sign-in...");
+            console.log("Firebase Config:", firebaseConfig); // Log the config being used
             try {
                 await signInWithPopup(auth, googleProvider);
                 // onAuthStateChanged will handle UI update
             } catch (error) {
                 console.error("Google Sign-In error:", error);
                 if (error.code === 'auth/popup-closed-by-user') {
-                    showMessageBox("Sign-in cancelled. Please try again.");
+                    showMessageBox("Sign-in cancelled. Please try again. (Check for popup blockers!)");
                 } else if (error.code === 'auth/unauthorized-domain') {
                     showMessageBox("Sign-in failed: The domain where this app is hosted is not authorized in your Firebase project. Please add this domain to 'Authorized domains' in Firebase Console > Authentication > Sign-in method.");
                 }
                 else {
-                    showMessageBox(`Sign-in failed: ${error.message}`);
+                    showMessageBox(`Sign-in failed: ${error.message}. Please check your browser's console for more details and ensure Google Sign-In is enabled in your Firebase project.`);
                 }
             }
         });
@@ -269,7 +318,7 @@
                 appContent.classList.add('hidden'); // Hide app content
                 console.log("User is signed out.");
                 // Clear songs list if no user is signed in
-                proposalsList.innerHTML = '<p class="text-center text-gray-400">Please sign in to view and add songs.</p>';
+                proposalsList.innerHTML = '<p class="text-center text-gray-400 text-sm">Please sign in to view and add songs.</p>';
                 loadingMessage.classList.add('hidden');
             }
         });
@@ -291,16 +340,17 @@
             }
 
             try {
-                // Automatically vote for own song
-                // The votes array will now store just UIDs for consistency with arrayUnion/Remove
-                const initialVotes = [currentUserId];
+                // Automatically upvote for own song
+                const initialUpvotes = [currentUserId];
 
                 // Add a new document to the 'proposals' collection
                 await addDoc(collection(db, `artifacts/${appId}/public/data/proposals`), { // Still using 'proposals' collection name for data consistency
                     title: title,
                     description: description,
                     link: link, // Save the optional link
-                    votes: initialVotes, // User automatically votes for their own song
+                    upvotes: initialUpvotes, // User automatically upvotes for their own song
+                    downvotes: [], // Initialize downvotes
+                    comments: [], // Initialize comments array
                     createdAt: new Date(),
                     createdBy: currentUserId,
                     createdByDisplayName: currentUserDisplayName // Store the display name
@@ -354,156 +404,217 @@
             });
 
             if (filteredProposals.length === 0) {
-                proposalsList.innerHTML = '<p class="text-center text-gray-400">No songs match your search.</p>';
+                proposalsList.innerHTML = '<p class="text-center text-gray-400 text-sm">No songs match your search.</p>';
                 return;
             }
 
             filteredProposals.forEach(prop => {
                 const proposal = prop.data;
                 const proposalId = prop.id;
-                const votes = proposal.votes || [];
-                // Now votes array contains UIDs directly
-                const voteCount = votes.length;
-                const hasVoted = votes.includes(currentUserId); // Check for UID directly
+                const upvotes = proposal.upvotes || [];
+                const downvotes = proposal.downvotes || [];
+                const comments = proposal.comments || []; // Get comments
+
+                const upvoteCount = upvotes.length;
+                const downvoteCount = downvotes.length;
+
+                const hasUpvoted = upvotes.includes(currentUserId);
+                const hasDownvoted = downvotes.includes(currentUserId);
+
                 const proposerName = proposal.createdByDisplayName || `User ${proposal.createdBy.substring(0, 8)}...`;
                 const isOwner = proposal.createdBy === currentUserId;
 
-                // For displaying voters, we'll try to use the stored display name if available
-                // Otherwise, we'll just show a generic "User X..."
-                const voterDisplayNames = votes
-                    .filter(voterId => typeof voterId === 'string') // Safeguard: only process string UIDs
+                // Generate voter initial icons
+                const upvoterIcons = upvotes
+                    .filter(voterId => typeof voterId === 'string' && voterId.length > 0) // Ensure valid UIDs
                     .map(voterId => {
-                        if (voterId === proposal.createdBy) {
-                            return proposal.createdByDisplayName || `User ${voterId.substring(0, 8)}...`;
-                        }
-                        // For other voters, we don't have their display name stored with the vote itself.
-                        // In a more complex app, you'd have a 'users' collection to look up names.
-                        // For now, we'll just show their truncated UID.
-                        return `User ${voterId.substring(0, 8)}...`;
-                    });
+                        const displayName = (voterId === proposal.createdBy) ? proposal.createdByDisplayName : `User ${voterId.substring(0, 8)}...`;
+                        const initials = getInitials(displayName);
+                        const bgColor = getColorFromUserId(voterId);
+                        return `<span class="initial-icon" style="background-color:${bgColor};" title="${displayName}">${initials}</span>`;
+                    }).join('');
 
-                const voterListHtml = votes.length > 0
-                    ? `<div class="text-xs text-gray-400 mt-2">Voted by: ${voterDisplayNames.join(', ')}</div>`
+                const downvoterIcons = downvotes
+                    .filter(voterId => typeof voterId === 'string' && voterId.length > 0) // Ensure valid UIDs
+                    .map(voterId => {
+                        const displayName = (voterId === proposal.createdBy) ? proposal.createdByDisplayName : `User ${voterId.substring(0, 8)}...`;
+                        const initials = getInitials(displayName);
+                        const bgColor = getColorFromUserId(voterId);
+                        return `<span class="initial-icon" style="background-color:${bgColor};" title="${displayName}">${initials}</span>`;
+                    }).join('');
+
+                const upvoterListHtml = upvotes.length > 0
+                    ? `<div class="flex items-center flex-wrap gap-1 mt-1"><span class="text-xs text-gray-400 mr-1">Upvoted by:</span>${upvoterIcons}</div>`
                     : '';
+                const downvoterListHtml = downvotes.length > 0
+                    ? `<div class="flex items-center flex-wrap gap-1 mt-1"><span class="text-xs text-gray-400 mr-1">Downvoted by:</span>${downvoterIcons}</div>`
+                    : '';
+
 
                 const linkHtml = proposal.link
                     ? `<a href="${proposal.link}" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:underline text-sm mt-1 block">Listen/View Link</a>`
                     : '';
 
                 const proposalDiv = document.createElement('div');
-                proposalDiv.className = 'bg-gray-700 p-4 rounded-lg shadow-md flex flex-col';
+                proposalDiv.className = 'bg-gray-700 p-3 rounded-lg shadow-md flex flex-col'; // Reduced padding
                 proposalDiv.innerHTML = `
                     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-2">
                         <div class="flex-grow mb-2 sm:mb-0">
                             <div class="flex flex-col sm:flex-row sm:items-baseline sm:gap-x-2">
-                                <h3 class="text-xl font-semibold text-white leading-tight">${proposal.title}</h3>
-                                <p class="text-gray-300 text-sm sm:text-base leading-tight mt-1 sm:mt-0">${proposal.description}</p>
+                                <h3 class="text-lg font-semibold text-white leading-tight">${proposal.title}</h3>
+                                <p class="text-gray-300 text-sm sm:text-base leading-tight mt-0 sm:mt-0">${proposal.description}</p>
                             </div>
                             ${linkHtml}
                             <p class="text-gray-400 text-xs mt-1 leading-tight">Proposed by: ${proposerName}</p>
-                            ${voterListHtml}
+                            ${upvoterListHtml}
+                            ${downvoterListHtml}
                         </div>
-                        <div class="flex flex-wrap justify-end gap-2 sm:flex-nowrap sm:justify-start mt-2 sm:mt-0">
-                            <span class="text-xl font-bold text-blue-400">${voteCount} Votes</span>
-                            <button id="voteBtn-${proposalId}" class="vote-btn ${hasVoted ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'} text-white py-2 px-3 rounded-md transition duration-300 ease-in-out shadow-sm text-sm" data-id="${proposalId}" data-voted="${hasVoted}">
-                                ${hasVoted ? 'Voted' : 'Vote'}
+                        <div class="flex items-center gap-2 mt-2 sm:mt-0">
+                            <button class="vote-btn ${hasUpvoted ? 'bg-green-600' : 'bg-blue-600'} text-white p-2 rounded-md hover:bg-green-700 transition duration-300 ease-in-out shadow-sm text-sm flex items-center gap-1" data-id="${proposalId}" data-vote-type="up">
+                                ⬆️ ${upvoteCount}
                             </button>
+                            <button class="vote-btn ${hasDownvoted ? 'bg-red-600' : 'bg-blue-600'} text-white p-2 rounded-md hover:bg-red-700 transition duration-300 ease-in-out shadow-sm text-sm flex items-center gap-1" data-id="${proposalId}" data-vote-type="down">
+                                ⬇️ ${downvoteCount}
+                            </button>
+
                             ${isOwner ? `
-                            <button class="edit-btn bg-yellow-600 text-white py-2 px-3 rounded-md hover:bg-yellow-700 transition duration-300 ease-in-out shadow-sm text-sm" data-id="${proposalId}" data-title="${proposal.title}" data-description="${proposal.description}" data-link="${proposal.link || ''}">Edit</button>
-                            <button class="delete-btn bg-red-600 text-white py-2 px-3 rounded-md hover:bg-red-700 transition duration-300 ease-in-out shadow-sm text-sm" data-id="${proposalId}">Delete</button>
+                            <button class="edit-btn bg-yellow-600 text-white p-2 rounded-md hover:bg-yellow-700 transition duration-300 ease-in-out shadow-sm text-sm" data-id="${proposalId}" data-title="${proposal.title}" data-description="${proposal.description}" data-link="${proposal.link || ''}">
+                                ✏️
+                            </button>
+                            <button class="delete-btn bg-red-600 text-white p-2 rounded-md hover:bg-red-700 transition duration-300 ease-in-out shadow-sm text-sm" data-id="${proposalId}">
+                                🗑️
+                            </button>
                             ` : ''}
                         </div>
                     </div>
                     <!-- Comments Section -->
-                    <div class="comments-container mt-4 pt-4 border-t border-gray-600">
-                        <button class="toggle-comments-btn text-blue-400 hover:underline text-sm mb-2">Show Comments (0)</button>
-                        <div id="commentsListContainer-${proposalId}" class="comments-list-container collapsed">
-                            <div id="commentsList-${proposalId}" class="space-y-2 text-sm text-gray-300 mb-3">
-                                <!-- Comments will be loaded here -->
-                                <p class="text-gray-400 text-xs">No comments yet.</p>
-                            </div>
-                            <div class="flex flex-col sm:flex-row gap-2">
-                                <textarea id="commentInput-${proposalId}" placeholder="Add a comment..." class="flex-grow p-2 border border-gray-600 rounded-md text-sm resize-y min-h-[40px] bg-gray-900 text-white"></textarea>
-                                <button class="post-comment-btn bg-gray-600 text-white py-2 px-4 rounded-md hover:bg-gray-700 transition duration-300 shadow-sm" data-id="${proposalId}">Post</button>
-                            </div>
+                    <div c-3 pt-3 border-t border-gray-600">
+                        <h4 class="text-md font-semibold text-white mb-2 cursor-pointer toggle-comments" data-id="${proposalId}">
+                            💬 Comments (${comments.length}) <span class="toggle-icon">▼</span>
+                        </h4>
+                        <div class="comments-list-container collapsed" id="comments-list-${proposalId}">
+                            ${comments.length > 0 ? comments.map(comment => `
+                                <dlass="bg-gray-600 p-2 rounded-md mb-2 text-sm flex justify-between items-start">
+                                    <div>
+                                        <p class="text-gray-200">${comment.text}</p>
+                                        <p class="text-gray-400 text-xs mt-1">
+                                            — ${comment.createdByDisplayName || `User ${comment.createdBy.substring(0, 8)}...`}
+                                            <span class="ml-2">${new Date(comment.createdAt.secds * 1000).toLocaleString()}</span>
+                                        </p>
+                                    </div>
+                                    ${comment.createdBy === currentUserId ? `
+                                    <div class="flex gap-1 ml-2">
+                                        <button class="edit-comment-btn text-yellow-300 hover:text-yellow-400 text-xs p-1 rounded" data-proposal-id="${proposalId}" data-comment-id="${comment.id}" data-comment-text="${comment.text}">✏️</butt                                        <button class="delete-comment-btn text-red-300 hover:text-red-400 text-xs p-1 rounded" data-proposal-id="${proposalId}" data-comment-id="${comment.id}">🗑️</button>
+                                    </div>
+                                    ` : ''}
+                                </div>
+                            `).join('') : '<p class="text-gray-400 text-sm">No comments yet.</p>'}
+                            <div class="mt-3 flex gap-2 add-comment-section cosed" id="add-comment-section-${proposalId}">
+                                <input type="text" placeholder="Add a comment..." class="add-comment-input w-full p-2 text-sm border border-gray-600 rounded-md focus:ring-blue-500 focus:border-blue-500 bg-gray-900 text-white" data-id="${proposalId}">
+                                <button class="add-comment-btn bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition duration-300 text-sm" data-id="${proposalId}">➕</button>
+                          </div>
                         </div>
                     </div>
                 `;
                 proposalsList.appendChild(proposalDiv);
-
-                // Listen for comments for this specific song
-                listenForComments(proposalId);
             });
 
-            // Add event listeners to vote buttons
+            // Add event listeners for voting, editing, deleting, and comments
+            addEventListeners();
+        }
+
+        function addEventListeners() {
+            // Vote buttons
             document.querySelectorAll('.vote-btn').forEach(button => {
-                button.addEventListener('click', async (event) => {
-                    const proposalId = event.target.dataset.id;
-                    const votedStatus = event.target.dataset.voted === 'true';
-
-                    if (!currentUserId) {
-                        showMessageBox("You must be signed in to vote.");
-                        return;
-                    }
-
+                button.onclick = async (event) => {
+                    const proposalId = event.currentTarget.dataset.id;
+                    const voteType = event.currentTarget.dataset.voteType; // 'up' or 'down'
                     const proposalRef = doc(db, `artifacts/${appId}/public/data/proposals`, proposalId);
 
                     try {
-                        if (votedStatus) {
-                            // User has voted, so remove their UID
-                            await updateDoc(proposalRef, {
-                                votes: arrayRemove(currentUserId)
-                            });
-                        } else {
-                            // User has not voted, so add their UID
-                            await updateDoc(proposalRef, {
-                                votes: arrayUnion(currentUserId)
-                            });
+                        const currentProposal = allProposals.find(p => p.id === proposalId);
+                        if (!currentProposal) return;
+
+                        let upvotes = [...(currentProposal.data.upvotes || [])];
+                        let downvotes = [...(currentProposal.data.downvotes || [])];
+
+                        if (!currentUserId) {
+                            showMessageBox("You must be signed in to vote.");
+                            return;
                         }
+
+                        if (voteType === 'up') {
+                            if (upvotes.includes(currentUserId)) {
+                                // Already upvoted, so remove upvote (unvote)
+                                upvotes = upvotes.filter(uid => uid !== currentUserId);
+                            } else {
+                                // Add upvote, remove downvote if present
+                                upvotes.push(currentUserId);
+                                downvotes = downvotes.filter(uid => uid !== currentUserId);
+                            }
+                        } else if (voteType === 'down') {
+                            if (downvotes.includes(currentUserId)) {
+                                // Already downvoted, so remove downvote (unvote)
+                                downvotes = downvotes.filter(uid => uid !== currentUserId);
+                            } else {
+                                // Add downvote, remove upvote if present
+                                downvotes.push(currentUserId);
+                                upvotes = upvotes.filter(uid => uid !== currentUserId);
+                            }
+                        }
+
+                        await updateDoc(proposalRef, {
+                            upvotes: upvotes,
+                            downvotes: downvotes
+                        });
                     } catch (e) {
                         console.error("Error updating vote: ", e);
-                        showMessageBox("Failed to update vote. Please try again.");
+                        showMessageBox("Failed to cast vote. Please try again.");
                     }
-                });
+                };
             });
 
-            // Add event listeners to edit buttons
+            // Edit buttons
             document.querySelectorAll('.edit-btn').forEach(button => {
-                button.addEventListener('click', (event) => {
-                    const proposalId = event.target.dataset.id;
-                    const title = event.target.dataset.title;
-                    const description = event.target.dataset.description;
-                    const link = event.target.dataset.link; // Get the link
+                button.onclick = (event) => {
+                    const proposalId = event.currentTarget.dataset.id;
+                    const title = event.currentTarget.dataset.title;
+                    const description = event.currentTarget.dataset.description;
+                    const link = event.currentTarget.dataset.link;
 
                     editProposalIdInput.value = proposalId;
                     editTitleInput.value = title;
                     editDescriptionInput.value = description;
-                    editLinkInput.value = link; // Set the link in the modal
-                    editModal.classList.remove('hidden'); // Show the modal
-                });
+                    editLinkInput.value = link;
+                    editModal.classList.remove('hidden');
+                };
             });
 
-            // Add event listeners to delete buttons
+            // Delete buttons
             document.querySelectorAll('.delete-btn').forEach(button => {
-                button.addEventListener('click', async (event) => {
-                    const proposalId = event.target.dataset.id;
-                    if (confirm("Are you sure you want to delete this song?")) { // Using confirm for simplicity, custom modal for production
+                button.onclick = async (event) => {
+                    const proposalId = event.currentTarget.dataset.id;
+                    // Using custom message box instead of confirm()
+                    showMessageBox("Are you sure you want to delete this song? This action cannot be undone.");
+                    document.getElementById('messageBoxCloseBtn').onclick = async () => { // Re-assign handler for confirmation
                         try {
                             await deleteDoc(doc(db, `artifacts/${appId}/public/data/proposals`, proposalId));
-                            showMessageBox("Song deleted successfully!");
+                            messageBox.classList.add('hidden'); // Hide after action
                         } catch (e) {
                             console.error("Error deleting document: ", e);
                             showMessageBox("Failed to delete song. Please try again.");
                         }
-                    }
-                });
+                        // Restore original close handler for future messages
+                        document.getElementById('messageBoxCloseBtn').onclick = () => messageBox.classList.add('hidden');
+                    };
+                };
             });
 
-            // Add event listeners to post comment buttons
-            document.querySelectorAll('.post-comment-btn').forEach(button => {
-                button.addEventListener('click', async (event) => {
-                    const proposalId = event.target.dataset.id; // Corrected: now gets ID from button's data-id
-                    const commentInput = document.getElementById(`commentInput-${proposalId}`);
+            // Add Comment buttons
+            document.querySelectorAll('.add-comment-btn').forEach(button => {
+                button.onclick = async (event) => {
+                    const proposalId = event.currentTarget.dataset.id;
+                    const commentInput = document.querySelector(`.add-comment-input[data-id="${proposalId}"]`);
                     const commentText = commentInput.value.trim();
 
                     if (!commentText) {
@@ -512,130 +623,101 @@
                     }
 
                     if (!currentUserId) {
-                        showMessageBox("You must be signed in to post a comment.");
+                        showMessageBox("You must be signed in to add a comment.");
                         return;
                     }
 
                     try {
-                        await addDoc(collection(db, `artifacts/${appId}/public/data/proposals/${proposalId}/comments`), {
+                        const newComment = {
+                            id: Date.now().toString(), // Simple unique ID for the comment
                             text: commentText,
                             createdBy: currentUserId,
                             createdByDisplayName: currentUserDisplayName,
-                            createdAt: new Date(),
-                            isEdited: false, // New field for edit status
-                            lastEditedAt: null // New field for edit timestamp
+                            createdAt: new Date()
+                        };
+                        const proposalRef = doc(db, `artifacts/${appId}/public/data/proposals`, proposalId);
+                        await updateDoc(proposalRef, {
+                            comments: arrayUnion(newComment)
                         });
                         commentInput.value = ''; // Clear input
                     } catch (e) {
                         console.error("Error adding comment: ", e);
-                        showMessageBox("Failed to post comment. Please try again.");
+                        showMessageBox("Failed to add comment. Please try again.");
                     }
-                });
+                };
             });
 
-            // Add event listeners for toggling comments section
-            document.querySelectorAll('.toggle-comments-btn').forEach(button => {
-                button.addEventListener('click', (event) => {
-                    const commentsListContainer = event.target.nextElementSibling; // The div right after the button
-                    commentsListContainer.classList.toggle('collapsed');
-                    if (commentsListContainer.classList.contains('collapsed')) {
-                        event.target.textContent = `Show Comments (${commentsListContainer.dataset.commentCount || 0})`;
+            // Toggle Comments section
+            document.querySelectorAll('.toggle-comments').forEach(button => {
+                button.onclick = (event) => {
+                    const proposalId = event.currentTarget.dataset.id;
+                    const commentsContainer = document.getElementById(`comments-list-${proposalId}`);
+                    const addCommentSection = document.getElementById(`add-comment-section-${proposalId}`);
+                    const toggleIcon = event.currentTarget.querySelector('.toggle-icon');
+
+                    if (commentsContainer.classList.contains('collapsed')) {
+                        commentsContainer.classList.remove('collapsed');
+                        addCommentSection.classList.remove('collapsed'); // Show add comment section
+                        toggleIcon.textContent = '▲'; // Change to up arrow
                     } else {
-                        event.target.textContent = 'Hide Comments';
+                        commentsContainer.classList.add('collapsed');
+                        addCommentSection.classList.add('collapsed'); // Hide add comment section
+                      toggleIcon.textContent = '▼'; // Change to down arrow
                     }
-                });
+                };
             });
-        }
 
-        // Listen for comments for a specific song
-        function listenForComments(proposalId) {
-            const commentsColRef = collection(db, `artifacts/${appId}/public/data/proposals/${proposalId}/comments`);
-            const q = query(commentsColRef, orderBy("createdAt", "asc")); // Order comments chronologically
+            // Edit Comment buttons
+            document.querySelectorAll('.edit-comment-btn').forEach(button => {
+                button.onclick = (event) => {
+                    const proposalId = event.currentTarget.dataset.proposalId;
+                    const commentId = event.currentTarget.dataset.commentId;
+                    const commentText = event.currentTarget.daset.commentText;
 
-            onSnapshot(q, (snapshot) => {
-                const commentsListDiv = document.getElementById(`commentsList-${proposalId}`);
-                const toggleButton = commentsListDiv.closest('.comments-container').querySelector('.toggle-comments-btn');
-                const commentsListContainer = commentsListDiv.closest('.comments-list-container');
+                    editCommentProposalIdInput.value = proposalId;
+                    editCommentIdInput.value = commentId;
+                    editCommentTextInput.value = commentText;
+                    editCommentModal.classList.remove('hidden');
+                };
+            });
 
-                if (!commentsListDiv) return; // Guard against element not found
+            // Delete Comment buttons
+            document.querySelectorAll('.delete-comment-btn').forEach(button => {
+                button.onclick = async (event) => {
+                    const proposalId = event.currentTarget.dataset.proposalId;
+                    const commentIdToDelete = event.currentTarget.dataset.commentId;
 
-                commentsListDiv.innerHTML = ''; // Clear existing comments
-                commentsListContainer.dataset.commentCount = snapshot.size; // Store comment count
+                    // Using custom message box instead of confirm()
+                    showMessageBox("Are you sure you want to delete this comment?");
+                    document.getElementById('messageBoxCloseBtn').onclick = async () => { // Re-assign handler for confirmation
+                        try {
+                            const proposalRef = doc(db, `artifacts/${appId}/public/data/proposals`, proposalId);
+                            const currentProposal = allProposals.find(p => p.id === proposalId);
 
-                if (toggleButton && commentsListContainer.classList.contains('collapsed')) {
-                    toggleButton.textContent = `Show Comments (${snapshot.size})`;
-                } else if (toggleButton) {
-                    toggleButton.textContent = 'Hide Comments';
-                }
-
-
-                if (snapshot.empty) {
-                    commentsListDiv.innerHTML = '<p class="text-gray-400 text-xs">No comments yet.</p>';
-                    return;
-                }
-
-                snapshot.docs.forEach(commentDoc => {
-                    const comment = commentDoc.data();
-                    const commentId = commentDoc.id;
-                    const isOwner = comment.createdBy === currentUserId;
-                    const editedNote = comment.isEdited ? '<span class="text-gray-500 text-xs ml-1">(edited)</span>' : '';
-
-                    const commentDiv = document.createElement('div');
-                    commentDiv.className = 'bg-gray-600 p-2 rounded-md flex justify-between items-start'; /* Darker comment background */
-                    commentDiv.innerHTML = `
-                        <div>
-                            <p class="text-xs font-semibold text-gray-200">${comment.createdByDisplayName || `User ${comment.createdBy.substring(0, 8)}...`}${editedNote}</p>
-                            <p class="text-sm text-gray-100">${comment.text}</p>
-                            <p class="text-xs text-gray-400 mt-1">${new Date(comment.createdAt.toDate()).toLocaleString()}</p>
-                        </div>
-                        ${isOwner ? `
-                        <div class="flex space-x-1 ml-2">
-                            <button class="edit-comment-btn text-blue-400 hover:text-blue-300 text-xs" data-proposal-id="${proposalId}" data-comment-id="${commentId}" data-comment-text="${comment.text}">Edit</button>
-                            <button class="delete-comment-btn text-red-400 hover:text-red-300 text-xs" data-proposal-id="${proposalId}" data-comment-id="${commentId}">Delete</button>
-                        </div>
-                        ` : ''}
-                    `;
-                    commentsListDiv.appendChild(commentDiv);
-                });
-
-                // Add event listeners for comment edit/delete buttons
-                document.querySelectorAll('.edit-comment-btn').forEach(button => {
-                    button.addEventListener('click', (event) => {
-                        const proposalId = event.target.dataset.proposalId;
-                        const commentId = event.target.dataset.commentId;
-                        const commentText = event.target.dataset.commentText;
-
-                        editCommentProposalIdInput.value = proposalId;
-                        editCommentIdInput.value = commentId;
-                        editCommentTextInput.value = commentText;
-                        editCommentModal.classList.remove('hidden');
-                    });
-                });
-
-                document.querySelectorAll('.delete-comment-btn').forEach(button => {
-                    button.addEventListener('click', async (event) => {
-                        const proposalId = event.target.dataset.proposalId;
-                        const commentId = event.target.dataset.commentId;
-
-                        if (confirm("Are you sure you want to delete this comment?")) {
-                            try {
-                                await deleteDoc(doc(db, `artifacts/${appId}/public/data/proposals/${proposalId}/comments`, commentId));
-                                showMessageBox("Comment deleted successfully!");
-                            } catch (e) {
-                                console.error("Error deleting comment: ", e);
-                                showMessageBox("Failed to delete comment. Please try again.");
+                            if (currentProposal) {
+                                const updatedComments = currentProposal.data.comments.filter(comment => comment.id !== commentIdToDelete);
+                                await updateDoc(proposalRef, {
+                                    comments: updatedComments
+                                });
                             }
+                            messageBox.classList.add('hidden'); // Hide after action
+                        } catch (e) {
+                            console.error("Error deleting comment: ", e);
+                            showMessageBox("Failed to delete comment. Please try again.");
                         }
-                    });
-                });
-
-            }, (error) => {
-                console.error(`Error listening to comments for song ${proposalId}:`, error);
-                // Optionally display an error message for comments
+                        // Restore original close handler for future messages
+                        document.getElementById('messageBoxCloseBtn').onclick = () => messageBox.classList.add('hidden');
+                    };
+                };
             });
         }
 
-        // Edit Song Modal functionality
+        // Search input event listener
+        searchInput.addEventListener('input', () => {
+            renderProposals(allProposals); // Re-render with current search term
+        });
+
+        // Edit Modal Save and Cancel buttons
         cancelEditBtn.addEventListener('click', () => {
             editModal.classList.add('hidden');
         });
@@ -659,21 +741,20 @@
                     link: newLink
                 });
                 editModal.classList.add('hidden');
-                showMessageBox("Song updated successfully!");
             } catch (e) {
-                console.error("Error updating song: ", e);
-                showMessageBox("Failed to update song. Please try again.");
+                console.error("Error updating document: ", e);
+                showMessageBox("Failed to save changes. Please try again.");
             }
         });
 
-        // Edit Comment Modal functionality
+        // Edit Comment Modal Save and Cancel buttons
         cancelEditCommentBtn.addEventListener('click', () => {
             editCommentModal.classList.add('hidden');
         });
 
         saveEditCommentBtn.addEventListener('click', async () => {
             const proposalId = editCommentProposalIdInput.value;
-            const commentId = editCommentIdInput.value;
+            const commentIdToEdit = editCommentIdInput.value;
             const newCommentText = editCommentTextInput.value.trim();
 
             if (!newCommentText) {
@@ -682,25 +763,23 @@
             }
 
             try {
-                const commentRef = doc(db, `artifacts/${appId}/public/data/proposals/${proposalId}/comments`, commentId);
-                await updateDoc(commentRef, {
-                    text: newCommentText,
-                    isEdited: true, // Mark as edited
-                    lastEditedAt: new Date() // Set edit timestamp
-                });
+                const proposalRef = doc(db, `artifacts/${appId}/public/data/proposals`, proposalId);
+                const currentProposal = allProposals.find(p => p.id === proposalId);
+
+                if (currentProposal) {
+                    const updatedComments = currentProposal.data.comments.map(comment =>
+                        comment.id === commentIdToEdit ? { ...comment, text: newCommentText } : comment
+                    );
+                    await updateDoc(proposalRef, {
+                        comments: updatedComments
+                    });
+                }
                 editCommentModal.classList.add('hidden');
-                showMessageBox("Comment updated successfully!");
             } catch (e) {
-                console.error("Error updating comment: ", e);
-                showMessageBox("Failed to update comment. Please try again.");
+                console.error("Error saving comment changes: ", e);
+                showMessageBox("Failed to save comment changes. Please try again.");
             }
         });
-
-        // Search functionality
-        searchInput.addEventListener('input', () => {
-            renderProposals(allProposals); // Re-render with current search filter
-        });
-
     </script>
 </body>
 </html>
