@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proposal Voting App</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Inter font from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center p-4 sm:p-6">
+    <div class="bg-white p-6 sm:p-8 rounded-xl shadow-lg w-full max-w-md md:max-w-2xl lg:max-w-4xl">
+        <h1 class="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-6">Proposal Voting</h1>
+        <p class="text-center text-gray-600 mb-8">
+            Add new proposals, then vote on your favorites!
+            <span id="auth-status">
+                Your user is: <span id="user-id" class="font-semibold text-blue-600">Not signed in</span>
+            </span>
+        </p>
+
+        <!-- Authentication Section -->
+        <div id="authSection" class="text-center mb-8">
+            <p class="text-gray-700 mb-4">Please sign in to add proposals and vote:</p>
+            <button id="signInWithGoogleBtn" class="bg-red-600 text-white py-3 px-6 rounded-md hover:bg-red-700 transition duration-300 ease-in-out shadow-md flex items-center justify-center mx-auto">
+                <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12.24 10.27c.33 0 .65.03.96.08 1.48-.96 2.49-2.73 2.49-4.8 0-3.3-2.69-5.99-5.99-5.99-3.3 0-5.99 2.69-5.99 5.99 0 3.1 2.36 5.67 5.4 5.94v-2.06c-1.34-.27-2.35-1.5-2.35-3.08 0-1.7 1.39-3.09 3.09-3.09 1.7 0 3.09 1.39 3.09 3.09 0 1.58-1.01 2.81-2.35 3.08v2.06c3.04-.27 5.4-2.84 5.4-5.94 0-3.3-2.69-5.99-5.99-5.99z" fill="#EA4335"/>
+                    <path d="M12.24 10.27c-.33 0-.65-.03-.96-.08-1.48.96-2.49 2.73-2.49 4.8 0 3.3 2.69 5.99 5.99 5.99 3.3 0 5.99-2.69 5.99-5.99 0-3.1-2.36-5.67-5.4-5.94v2.06c1.34.27 2.35 1.5 2.35 3.08 0 1.7-1.39 3.09-3.09 3.09-1.7 0-3.09-1.39-3.09-3.09 0-1.58 1.01-2.81 2.35-3.08z" fill="#FBBC04"/>
+                    <path d="M12.24 10.27c-.33 0-.65-.03-.96-.08-1.48.96-2.49 2.73-2.49 4.8 0 3.3 2.69 5.99 5.99 5.99 3.3 0 5.99-2.69 5.99-5.99 0-3.1-2.36-5.67-5.4-5.94v2.06c1.34.27 2.35 1.5 2.35 3.08 0 1.7-1.39 3.09-3.09 3.09-1.7 0-3.09-1.39-3.09-3.09 0-1.58 1.01-2.81 2.35-3.08z" fill="#4285F4"/>
+                    <path d="M12.24 10.27c-.33 0-.65-.03-.96-.08-1.48.96-2.49 2.73-2.49 4.8 0 3.3 2.69 5.99 5.99 5.99 3.3 0 5.99-2.69 5.99-5.99 0-3.1-2.36-5.67-5.4-5.94v2.06c1.34.27 2.35 1.5 2.35 3.08 0 1.7-1.39 3.09-3.09 3.09-1.7 0-3.09-1.39-3.09-3.09 0-1.58 1.01-2.81 2.35-3.08z" fill="#34A853"/>
+                </svg>
+                Sign in with Google
+            </button>
+        </div>
+
+        <!-- Main App Content (hidden until authenticated) -->
+        <div id="appContent" class="hidden">
+            <!-- New Proposal Form -->
+            <div class="mb-8 p-4 bg-blue-50 rounded-lg shadow-inner">
+                <h2 class="text-2xl font-semibold text-blue-800 mb-4">Add New Proposal</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label for="proposalTitle" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                        <input type="text" id="proposalTitle" placeholder="e.g., Bohemian Rhapsody" class="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="proposalDescription" class="block text-sm font-medium text-gray-700 mb-1">Artist/Description</label>
+                        <input type="text" id="proposalDescription" placeholder="e.g., Queen (Classic Rock)" class="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+                <button id="addProposalBtn" class="w-full bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition duration-300 ease-in-out shadow-md">
+                    Add Proposal
+                </button>
+            </div>
+
+            <!-- Proposals List -->
+            <div>
+                <h2 class="text-2xl font-semibold text-gray-800 mb-4">Current Proposals</h2>
+                <div id="proposalsList" class="space-y-4">
+                    <!-- Proposals will be dynamically loaded here -->
+                    <p id="loadingMessage" class="text-center text-gray-500">Loading proposals...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Box for alerts -->
+    <div id="messageBox" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full text-center">
+            <p id="messageText" class="text-lg font-semibold text-gray-800 mb-4"></p>
+            <button id="messageBoxCloseBtn" class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, arrayUnion, arrayRemove } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Provided Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDLC0oIFYZ5tSSludYNO6eGO3LKpMno00I",
+            authDomain: "siberini.firebaseapp.com",
+            projectId: "siberini",
+            storageBucket: "siberini.firebasestorage.app",
+            messagingSenderId: "533139517303",
+            appId: "1:533139517303:web:75e143e976c48ed596bb72",
+            measurementId: "G-GG0NF9S621"
+        };
+
+        // Use the projectId as the base for the app-specific data path
+        const appId = firebaseConfig.projectId;
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        let currentUserId = null; // To store the authenticated user's UID
+        let currentUserDisplayName = null; // To store the authenticated user's display name
+
+        // Get DOM elements
+        const proposalTitleInput = document.getElementById('proposalTitle');
+        const proposalDescriptionInput = document.getElementById('proposalDescription');
+        const addProposalBtn = document.getElementById('addProposalBtn');
+        const proposalsList = document.getElementById('proposalsList');
+        const loadingMessage = document.getElementById('loadingMessage');
+        const userIdDisplay = document.getElementById('user-id');
+        const authSection = document.getElementById('authSection');
+        const appContent = document.getElementById('appContent');
+        const signInWithGoogleBtn = document.getElementById('signInWithGoogleBtn');
+        const messageBox = document.getElementById('messageBox');
+        const messageText = document.getElementById('messageText');
+        const messageBoxCloseBtn = document.getElementById('messageBoxCloseBtn');
+
+        // Function to show custom message box
+        function showMessageBox(message) {
+            messageText.textContent = message;
+            messageBox.classList.remove('hidden');
+        }
+
+        // Close message box
+        messageBoxCloseBtn.addEventListener('click', () => {
+            messageBox.classList.add('hidden');
+        });
+
+        // Sign in with Google
+        signInWithGoogleBtn.addEventListener('click', async () => {
+            try {
+                await signInWithPopup(auth, googleProvider);
+                // onAuthStateChanged will handle UI update
+            } catch (error) {
+                console.error("Google Sign-In error:", error);
+                if (error.code === 'auth/popup-closed-by-user') {
+                    showMessageBox("Sign-in cancelled. Please try again.");
+                } else if (error.code === 'auth/unauthorized-domain') {
+                    showMessageBox("Sign-in failed: The domain where this app is hosted is not authorized in your Firebase project. Please add this domain to 'Authorized domains' in Firebase Console > Authentication > Sign-in method.");
+                }
+                else {
+                    showMessageBox(`Sign-in failed: ${error.message}`);
+                }
+            }
+        });
+
+        // Authenticate user
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in
+                currentUserId = user.uid;
+                currentUserDisplayName = user.displayName || `User ${user.uid.substring(0, 8)}...`; // Use display name or truncated UID
+                userIdDisplay.textContent = currentUserDisplayName;
+                authSection.classList.add('hidden'); // Hide auth section
+                appContent.classList.remove('hidden'); // Show app content
+                console.log("Authenticated with UID:", currentUserId, "Display Name:", currentUserDisplayName);
+                // Start listening for proposals after authentication
+                listenForProposals();
+            } else {
+                // User is signed out
+                currentUserId = null;
+                currentUserDisplayName = null;
+                userIdDisplay.textContent = "Not signed in";
+                authSection.classList.remove('hidden'); // Show auth section
+                appContent.classList.add('hidden'); // Hide app content
+                console.log("User is signed out.");
+                // Clear proposals list if no user is signed in
+                proposalsList.innerHTML = '<p class="text-center text-gray-500">Please sign in to view and add proposals.</p>';
+                loadingMessage.classList.add('hidden');
+            }
+        });
+
+        // Add new proposal
+        addProposalBtn.addEventListener('click', async () => {
+            const title = proposalTitleInput.value.trim();
+            const description = proposalDescriptionInput.value.trim();
+
+            if (!title || !description) {
+                showMessageBox("Please enter both a title and a description for the proposal.");
+                return;
+            }
+
+            if (!currentUserId) {
+                showMessageBox("You must be signed in to add a proposal.");
+                return;
+            }
+
+            try {
+                // Add a new document to the 'proposals' collection
+                await addDoc(collection(db, `artifacts/${appId}/public/data/proposals`), {
+                    title: title,
+                    description: description,
+                    votes: [], // Array to store UIDs of users who voted
+                    createdAt: new Date(),
+                    createdBy: currentUserId,
+                    createdByDisplayName: currentUserDisplayName // Store the display name
+                });
+                proposalTitleInput.value = '';
+                proposalDescriptionInput.value = '';
+            } catch (e) {
+                console.error("Error adding document: ", e);
+                showMessageBox("Failed to add proposal. Please try again.");
+            }
+        });
+
+        // Listen for real-time updates to proposals
+        function listenForProposals() {
+            // Ensure currentUserId is available before listening
+            if (!currentUserId) {
+                console.warn("Attempted to listen for proposals without a currentUserId.");
+                return;
+            }
+
+            const proposalsColRef = collection(db, `artifacts/${appId}/public/data/proposals`);
+
+            onSnapshot(proposalsColRef, (snapshot) => {
+                proposalsList.innerHTML = ''; // Clear existing list
+                loadingMessage.classList.add('hidden'); // Hide loading message
+
+                if (snapshot.empty) {
+                    proposalsList.innerHTML = '<p class="text-center text-gray-500">No proposals yet. Be the first to add one!</p>';
+                    return;
+                }
+
+                snapshot.docs.forEach(docSnapshot => {
+                    const proposal = docSnapshot.data();
+                    const proposalId = docSnapshot.id;
+                    const voteCount = proposal.votes ? proposal.votes.length : 0;
+                    // Check if the current user's UID is in the votes array
+                    const hasVoted = proposal.votes && currentUserId && proposal.votes.includes(currentUserId);
+                    const proposerName = proposal.createdByDisplayName || `User ${proposal.createdBy.substring(0, 8)}...`; // Use display name or truncated UID
+
+                    const proposalDiv = document.createElement('div');
+                    proposalDiv.className = 'bg-white p-4 rounded-lg shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between';
+                    proposalDiv.innerHTML = `
+                        <div class="flex-grow mb-3 sm:mb-0">
+                            <h3 class="text-xl font-semibold text-gray-900">${proposal.title}</h3>
+                            <p class="text-gray-600 text-sm sm:text-base">${proposal.description}</p>
+                            <p class="text-gray-500 text-xs mt-1">Proposed by: ${proposerName}</p>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span class="text-xl font-bold text-blue-700">${voteCount} Votes</span>
+                            <button id="voteBtn-${proposalId}" class="vote-btn ${hasVoted ? 'bg-green-500 hover:bg-green-600' : 'bg-blue-500 hover:bg-blue-600'} text-white py-2 px-4 rounded-md transition duration-300 ease-in-out shadow-sm" data-id="${proposalId}" data-voted="${hasVoted}">
+                                ${hasVoted ? 'Voted' : 'Vote'}
+                            </button>
+                        </div>
+                    `;
+                    proposalsList.appendChild(proposalDiv);
+                });
+
+                // Add event listeners to new vote buttons
+                document.querySelectorAll('.vote-btn').forEach(button => {
+                    button.addEventListener('click', async (event) => {
+                        const proposalId = event.target.dataset.id;
+                        const votedStatus = event.target.dataset.voted === 'true';
+
+                        if (!currentUserId) {
+                            showMessageBox("You must be signed in to vote.");
+                            return;
+                        }
+
+                        const proposalRef = doc(db, `artifacts/${appId}/public/data/proposals`, proposalId);
+
+                        try {
+                            if (votedStatus) {
+                                // User has voted, so unvote
+                                await updateDoc(proposalRef, {
+                                    votes: arrayRemove(currentUserId)
+                                });
+                            } else {
+                                // User has not voted, so vote
+                                await updateDoc(proposalRef, {
+                                    votes: arrayUnion(currentUserId)
+                                });
+                            }
+                        } catch (e) {
+                            console.error("Error updating vote: ", e);
+                            showMessageBox("Failed to update vote. Please try again.");
+                        }
+                    });
+                });
+            }, (error) => {
+                console.error("Error listening to proposals:", error);
+                loadingMessage.textContent = "Error loading proposals.";
+                showMessageBox("Failed to load proposals. Please check your internet connection.");
+            });
+        }
+    </script>
+</body>
+</html>
+
