@@ -536,13 +536,19 @@
 
             // Function to render comments for a specific proposal
             function renderComments(proposalId, commentsData) {
+                console.log(`renderComments called for proposal ${proposalId}. Comments data length: ${commentsData.length}`, commentsData); // Added log
                 const commentsListContainer = document.getElementById(`comments-list-${proposalId}`);
                 if (!commentsListContainer) return;
 
                 const addCommentSection = document.getElementById(`add-comment-section-${proposalId}`);
-                const commentsCountSpan = commentsListContainer.previousElementSibling.querySelector('.toggle-comments');
+                // FIX: Select the comments count span directly using its unique ID
+                const commentsCountSpan = document.getElementById(`comments-count-${proposalId}`);
+
                 if (commentsCountSpan) {
                     commentsCountSpan.innerHTML = `💬 Comments (${commentsData.length}) <span class="toggle-icon">${commentsListContainer.classList.contains('collapsed') ? '▼' : '▲'}</span>`;
+                    console.log(`Updated comment count for proposal ${proposalId} to: ${commentsData.length}`); // Added log
+                } else {
+                    console.warn(`Could not find commentsCountSpan (by ID) for proposal ${proposalId}`);
                 }
 
                 let commentsHtml = '';
@@ -570,10 +576,13 @@
                     commentsHtml = '<p class="text-gray-400 text-sm">No comments yet.</p>';
                 }
 
+                // Temporarily store the add comment section HTML to re-append it
                 const addCommentSectionHtml = addCommentSection ? addCommentSection.outerHTML : '';
-                commentsListContainer.innerHTML = commentsHtml;
+                commentsListContainer.innerHTML = commentsHtml; // Clear and re-populate comments
                 if (addCommentSection) {
+                    // Re-append the add comment section to maintain its position and event listeners
                     commentsListContainer.appendChild(addCommentSection);
+                    // Ensure its visibility state is correct after re-appending
                     if (commentsListContainer.classList.contains('collapsed')) {
                         addCommentSection.classList.add('collapsed');
                     } else {
@@ -581,7 +590,7 @@
                     }
                 }
 
-                addEventListeners();
+                addEventListeners(); // Re-attach event listeners for newly rendered comments
             }
 
 
@@ -680,7 +689,7 @@
                             </div>
                         </div>
                         <div class="mt-3 pt-3 border-t border-gray-600">
-                            <h4 class="text-md font-semibold text-white mb-2 cursor-pointer toggle-comments" data-id="${proposalId}">
+                            <h4 id="comments-count-${proposalId}" class="text-md font-semibold text-white mb-2 cursor-pointer toggle-comments" data-id="${proposalId}">
                                 💬 Comments (0) <span class="toggle-icon">▼</span>
                             </h4>
                             <div class="comments-list-container collapsed" id="comments-list-${proposalId}">
@@ -705,10 +714,12 @@
                     }
 
                     commentListeners[proposalId] = onSnapshot(qComments, (commentsSnapshot) => {
+                        console.log(`onSnapshot for comments on proposal ${proposalId} triggered. Docs received: ${commentsSnapshot.docs.length}`); // Added log
                         const commentsData = commentsSnapshot.docs.map(docSnapshot => ({
                             id: docSnapshot.id,
                             ...docSnapshot.data()
                         }));
+                        console.log(`Comments data prepared for rendering:`, commentsData); // Added log
                         renderComments(proposalId, commentsData);
                     }, (error) => {
                         console.error(`Error listening to comments for proposal ${proposalId}:`, error);
